@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hayati Admin Demo</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark: #211812;
+      --cream: #f7f3ec;
+      --white: #fff;
+      --brand: #b84224;
+      --brand-dark: #8d341e;
+      --gold: #d89a16;
+      --muted: #75685d;
+      --shadow: 0 18px 45px rgba(43, 33, 24, 0.13);
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(184, 66, 36, 0.18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(216, 154, 22, 0.18), transparent 34%),
+        var(--cream);
+      color: #2b2b2b;
+      padding: 24px;
+    }
+    .shell { max-width: 1120px; margin: 0 auto; }
+    .login, .panel {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow);
+      border-radius: 28px;
+      overflow: hidden;
+    }
+    .login { max-width: 460px; margin: 80px auto; padding: 34px; }
+    .logo {
+      width: 58px;
+      height: 58px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--brand), var(--gold));
+      box-shadow: 0 12px 26px rgba(184, 66, 36, 0.25);
+      margin-bottom: 20px;
+    }
+    h1 { font-size: clamp(28px, 4vw, 42px); color: var(--dark); margin-bottom: 8px; }
+    .subtitle { color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+    label { display: block; font-weight: 800; margin-bottom: 8px; color: #3b332c; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #e2d5c5;
+      background: #fffaf3;
+      border-radius: 16px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+      transition: 0.2s ease;
+    }
+    textarea { min-height: 105px; resize: vertical; }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(184, 66, 36, 0.12);
+    }
+    .field { margin-bottom: 18px; }
+    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    button, .button-link {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 18px;
+      cursor: pointer;
+      font-weight: 900;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s ease;
+    }
+    button:hover, .button-link:hover { transform: translateY(-2px); }
+    .primary { background: var(--brand); color: #fff; box-shadow: 0 12px 24px rgba(184, 66, 36, 0.22); }
+    .secondary { background: #f4eadc; color: #5a4b3d; }
+    .dark { background: var(--dark); color: #fff; }
+    .danger { background: #cf3d3d; color: #fff; }
+    .hidden { display: none !important; }
+    .panel-header {
+      background: linear-gradient(135deg, var(--dark), #3b281b);
+      color: #fff;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .panel-header p { color: #f7e9d8; margin-top: 4px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      padding: 24px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #f0e4d7;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.06);
+    }
+    .card h2 { font-size: 22px; color: var(--brand-dark); margin-bottom: 16px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px;
+      background: #fffaf3;
+      border: 1px solid #f0e4d7;
+      border-radius: 18px;
+      margin-bottom: 18px;
+    }
+    .switch-row input { width: auto; transform: scale(1.25); }
+    .preview-box {
+      background: #fffaf3;
+      border: 1px dashed #d7b98e;
+      border-radius: 20px;
+      padding: 18px;
+      line-height: 1.7;
+      color: #3b332c;
+    }
+    .preview-box strong { color: var(--brand-dark); }
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--dark);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      display: none;
+      z-index: 10;
+    }
+    .toast.show { display: block; animation: pop 0.25s ease both; }
+    .note {
+      margin-top: 16px;
+      padding: 14px;
+      background: #fff7e8;
+      border: 1px solid #efd6ab;
+      border-radius: 18px;
+      color: #6a4d25;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    @keyframes pop { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @media (max-width: 820px) {
+      body { padding: 14px; }
+      .grid, .row { grid-template-columns: 1fr; }
+      .login { margin: 35px auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="login" id="loginBox">
+      <div class="logo">H</div>
+      <h1>Admin Demo</h1>
+      <p class="subtitle">Demo-Verwaltung für Hayati. Diese Seite ist nur zur Präsentation gedacht.</p>
+      <div class="field">
+        <label for="password">Passwort</label>
+        <input id="password" type="password" placeholder="Passwort eingeben" />
+      </div>
+      <button class="primary" id="loginBtn" type="button">Einloggen</button>
+      <div class="note">Demo-Passwort: <strong>hayati2026</strong></div>
+    </section>
+
+    <section class="panel hidden" id="adminPanel">
+      <div class="panel-header">
+        <div>
+          <h1>Hayati Admin Demo</h1>
+          <p>Inhalte ändern, speichern und die Website direkt ansehen.</p>
+        </div>
+        <div class="btns">
+          <a class="button-link secondary" href="index.html" target="_blank">Website öffnen</a>
+          <button class="dark" type="button" id="logoutBtn">Abmelden</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Grunddaten</h2>
+          <div class="row">
+            <div class="field">
+              <label for="restaurantName">Restaurantname</label>
+              <input id="restaurantName" type="text" />
+            </div>
+            <div class="field">
+              <label for="phoneDisplay">Telefon sichtbar</label>
+              <input id="phoneDisplay" type="text" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="whatsappNumber">WhatsApp Nummer international</label>
+            <input id="whatsappNumber" type="text" placeholder="z. B. 4917612345678" />
+          </div>
+
+          <div class="field">
+            <label for="topbarText">Text oben</label>
+            <input id="topbarText" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="heroText">Startseiten-Text</label>
+            <textarea id="heroText"></textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Tagesangebot</h2>
+          <div class="switch-row">
+            <div>
+              <strong>Angebot anzeigen</strong><br />
+              <span style="color: var(--muted);">Auf der Startseite sichtbar machen</span>
+            </div>
+            <input id="offerActive" type="checkbox" />
+          </div>
+
+          <div class="field">
+            <label for="offerLabel">Kleiner Titel</label>
+            <input id="offerLabel" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="offerTitle">Angebots-Titel</label>
+            <input id="offerTitle" type="text" />
+          </div>
+
+          <div class="field">
+            <label for="offerText">Beschreibung</label>
+            <textarea id="offerText"></textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Vorschau der gespeicherten Daten</h2>
+          <div class="preview-box" id="previewBox"></div>
+        </div>
+
+        <div class="card">
+          <h2>Aktionen</h2>
+          <div class="btns">
+            <button class="primary" type="button" id="saveBtn">Änderungen speichern</button>
+            <button class="secondary" type="button" id="loadBtn">Neu laden</button>
+            <button class="danger" type="button" id="resetBtn">Demo zurücksetzen</button>
+          </div>
+          <div class="note">
+            Diese Admin-Seite nutzt <strong>localStorage</strong>. Das bedeutet: Die Änderungen gelten nur in diesem Browser. Für ein echtes System braucht man später Google Sheets, Firebase, Supabase oder ein Backend.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Gespeichert</div>
+
+  <script>
+    const DEMO_PASSWORD = 'hayati2026';
+    const STORAGE_KEY = 'hayatiAdminSettings';
+    const LOGIN_KEY = 'hayatiAdminLoggedIn';
+
+    const defaultSettings = {
+      restaurantName: 'Hayati',
+      phoneDisplay: '0221 29817957',
+      whatsappNumber: '4922129817957',
+      topbarText: 'Heute bis 23:00 geöffnet · Anrufen: 0221 29817957',
+      heroText: 'Arabische Speisen im orientalischen Stil – frisch, halal und mitten in Köln.',
+      offerActive: true,
+      offerLabel: 'Tagesangebot',
+      offerTitle: 'Shawarma Teller + Getränk',
+      offerText: 'Nur heute als besonderes Angebot. Fragen Sie gern direkt im Restaurant nach.'
+    };
+
+    const fields = [
+      'restaurantName', 'phoneDisplay', 'whatsappNumber', 'topbarText', 'heroText',
+      'offerActive', 'offerLabel', 'offerTitle', 'offerText'
+    ];
+
+    const loginBox = document.getElementById('loginBox');
+    const adminPanel = document.getElementById('adminPanel');
+    const toast = document.getElementById('toast');
+    const previewBox = document.getElementById('previewBox');
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    function getSettings() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return { ...defaultSettings };
+      try {
+        return { ...defaultSettings, ...JSON.parse(saved) };
+      } catch {
+        return { ...defaultSettings };
+      }
+    }
+
+    function fillForm() {
+      const settings = getSettings();
+      fields.forEach((field) => {
+        const el = document.getElementById(field);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = Boolean(settings[field]);
+        else el.value = settings[field] ?? '';
+      });
+      updatePreview();
+    }
+
+    function collectForm() {
+      const settings = {};
+      fields.forEach((field) => {
+        const el = document.getElementById(field);
+        if (!el) return;
+        settings[field] = el.type === 'checkbox' ? el.checked : el.value.trim();
+      });
+      settings.whatsappNumber = settings.whatsappNumber.replace(/\D/g, '');
+      return settings;
+    }
+
+    function saveSettings() {
+      const settings = collectForm();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+      updatePreview();
+      showToast('Änderungen gespeichert');
+    }
+
+    function updatePreview() {
+      const s = collectForm();
+      previewBox.innerHTML = `
+        <strong>Restaurant:</strong> ${s.restaurantName || '-'}<br>
+        <strong>Telefon:</strong> ${s.phoneDisplay || '-'}<br>
+        <strong>WhatsApp:</strong> ${s.whatsappNumber || '-'}<br>
+        <strong>Oben:</strong> ${s.topbarText || '-'}<br>
+        <strong>Starttext:</strong> ${s.heroText || '-'}<br>
+        <strong>Tagesangebot:</strong> ${s.offerActive ? 'aktiv' : 'aus'}<br>
+        <strong>Angebot:</strong> ${s.offerTitle || '-'}<br>
+        <strong>Text:</strong> ${s.offerText || '-'}
+      `;
+    }
+
+    function showPanel() {
+      loginBox.classList.add('hidden');
+      adminPanel.classList.remove('hidden');
+      fillForm();
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const password = document.getElementById('password').value;
+      if (password === DEMO_PASSWORD) {
+        localStorage.setItem(LOGIN_KEY, '1');
+        showPanel();
+      } else {
+        showToast('Falsches Passwort');
+      }
+    });
+
+    document.getElementById('password').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem(LOGIN_KEY);
+      adminPanel.classList.add('hidden');
+      loginBox.classList.remove('hidden');
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', saveSettings);
+    document.getElementById('loadBtn').addEventListener('click', fillForm);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (!confirm('Demo-Daten wirklich zurücksetzen?')) return;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSettings));
+      fillForm();
+      showToast('Demo zurückgesetzt');
+    });
+
+    fields.forEach((field) => {
+      const el = document.getElementById(field);
+      if (el) el.addEventListener('input', updatePreview);
+    });
+
+    if (localStorage.getItem(LOGIN_KEY) === '1') showPanel();
+  </script>
+</body>
+</html>
