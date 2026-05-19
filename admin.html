@@ -3,450 +3,1037 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hayati Admin Demo</title>
+  <title>Hayati – Orientalisches Restaurant in Köln</title>
+  <meta name="description" content="Hayati Köln – Orientalisches Restaurant auf der Severinstraße nahe Chlodwigplatz. Falafel, Hummus, Shawarma, Haloumi und mehr." />
+  <meta name="theme-color" content="#b84224" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Hayati" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
       --dark: #211812;
+      --dark-2: #2b2118;
       --cream: #f7f3ec;
-      --white: #fff;
+      --cream-2: #fffaf3;
+      --white: #ffffff;
+      --text: #2b2b2b;
+      --muted: #7b7067;
       --brand: #b84224;
       --brand-dark: #8d341e;
       --gold: #d89a16;
-      --muted: #75685d;
-      --shadow: 0 18px 45px rgba(43, 33, 24, 0.13);
+      --whatsapp: #25D366;
+      --shadow: 0 18px 45px rgba(43, 33, 24, 0.12);
+      --soft-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      --radius: 24px;
     }
+
     html { scroll-behavior: smooth; }
+
     body {
       font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top left, rgba(184, 66, 36, 0.18), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(216, 154, 22, 0.18), transparent 34%),
-        var(--cream);
-      color: #2b2b2b;
-      padding: 24px;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
+
     body.lang-ar {
       direction: rtl;
-      text-align: right;
+      font-family: Arial, Helvetica, sans-serif;
     }
-    body.lang-ar input,
-    body.lang-ar textarea {
+
+    body.lang-ar .nav-inner,
+    body.lang-ar .buttons,
+    body.lang-ar .hero-stats,
+    body.lang-ar .trust-strip,
+    body.lang-ar .featured-grid,
+    body.lang-ar .review-grid,
+    body.lang-ar .menu-grid,
+    body.lang-ar .gallery-grid,
+    body.lang-ar .contact-grid {
       direction: rtl;
-      text-align: right;
     }
-    .shell { max-width: 1120px; margin: 0 auto; }
-    .language-switch {
+
+    body.lang-ar .opening-table td:last-child { text-align: left; }
+    body.lang-ar .contact-card, body.lang-ar .menu-card, body.lang-ar .review-card { text-align: right; }
+
+    a { color: inherit; }
+
+    body::before,
+    body::after {
+      content: "";
       position: fixed;
-      top: 18px;
-      right: 18px;
-      z-index: 20;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      z-index: -1;
+      filter: blur(18px);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    body::before { background: var(--brand); top: 120px; left: -180px; }
+    body::after { background: var(--gold); bottom: 70px; right: -170px; }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--gold));
+      z-index: 999;
+      transition: width 0.08s linear;
+    }
+
+    .topbar {
+      background: var(--dark);
+      color: #fff;
+      padding: 10px 18px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #37d67a;
+      margin-right: 7px;
+      box-shadow: 0 0 0 0 rgba(55, 214, 122, 0.65);
+      animation: pulse 1.9s infinite;
+    }
+
+    body.lang-ar .status-dot { margin-right: 0; margin-left: 7px; }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(55, 214, 122, 0.65); }
+      70% { box-shadow: 0 0 0 10px rgba(55, 214, 122, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(55, 214, 122, 0); }
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(231, 221, 207, 0.8);
+      backdrop-filter: blur(16px);
+      transition: 0.25s ease;
+    }
+
+    .navbar.scrolled { box-shadow: 0 10px 30px rgba(43, 33, 24, 0.08); }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      gap: 18px;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--brand-dark);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      font-size: 17px;
+      background: linear-gradient(135deg, var(--brand), var(--gold));
+      box-shadow: 0 8px 18px rgba(184, 66, 36, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 15px;
+      font-weight: 700;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #3b332c;
+      position: relative;
+      padding-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--brand);
+      transition: width 0.2s ease;
+    }
+
+    .nav-links a:hover::after { width: 100%; }
+
+    .language-switch {
       display: flex;
       gap: 6px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid #e7ddcf;
+      background: #f4eadc;
       border-radius: 999px;
-      padding: 5px;
-      box-shadow: 0 10px 24px rgba(43, 33, 24, 0.1);
-      backdrop-filter: blur(12px);
+      padding: 4px;
+      border: 1px solid #e7ddcf;
+      flex-shrink: 0;
     }
-    body.lang-ar .language-switch { right: auto; left: 18px; }
+
     .language-switch button {
       border: 0;
       background: transparent;
+      padding: 8px 11px;
       border-radius: 999px;
-      padding: 9px 13px;
       cursor: pointer;
       font-weight: 900;
       color: #5a4b3d;
+      transition: 0.2s ease;
     }
+
     .language-switch button.active {
       background: var(--brand);
       color: #fff;
-      box-shadow: 0 6px 14px rgba(184, 66, 36, 0.2);
+      box-shadow: 0 6px 14px rgba(184, 66, 36, 0.22);
     }
-    .login, .panel {
-      background: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.75);
-      box-shadow: var(--shadow);
-      border-radius: 28px;
-      overflow: hidden;
-    }
-    .login { max-width: 460px; margin: 80px auto; padding: 34px; }
-    .logo {
-      width: 58px;
-      height: 58px;
-      border-radius: 20px;
-      display: grid;
-      place-items: center;
+
+    .hero {
+      min-height: 82vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 20px;
       color: #fff;
-      font-size: 28px;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--brand), var(--gold));
-      box-shadow: 0 12px 26px rgba(184, 66, 36, 0.25);
-      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        linear-gradient(rgba(34, 21, 12, 0.66), rgba(34, 21, 12, 0.7)),
+        url("https://images.unsplash.com/photo-1542528180-a1208c5169a5?q=80&w=1800&auto=format&fit=crop") center/cover no-repeat;
     }
-    h1 { font-size: clamp(28px, 4vw, 42px); color: var(--dark); margin-bottom: 8px; }
-    .subtitle { color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
-    label { display: block; font-weight: 800; margin-bottom: 8px; color: #3b332c; }
-    input, textarea, select {
-      width: 100%;
-      border: 1px solid #e2d5c5;
-      background: #fffaf3;
-      border-radius: 16px;
-      padding: 13px 14px;
-      font: inherit;
-      outline: none;
-      transition: 0.2s ease;
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -20px;
+      background: inherit;
+      z-index: -2;
+      animation: heroZoom 14s ease-in-out infinite alternate;
     }
-    textarea { min-height: 105px; resize: vertical; }
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--brand);
-      box-shadow: 0 0 0 4px rgba(184, 66, 36, 0.12);
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.35) 72%);
+      z-index: -1;
     }
-    .field { margin-bottom: 18px; }
-    .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-    button, .button-link {
-      border: 0;
+
+    @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+    .hero-content {
+      max-width: 900px;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero small {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(10px);
+      padding: 8px 14px;
       border-radius: 999px;
-      padding: 13px 18px;
-      cursor: pointer;
-      font-weight: 900;
-      text-decoration: none;
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(50px, 10vw, 96px);
+      line-height: 1;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+      text-shadow: 0 10px 35px rgba(0,0,0,0.3);
+    }
+
+    .hero p {
+      font-size: clamp(18px, 3vw, 25px);
+      margin-bottom: 30px;
+      color: #fff4e8;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: 0.2s ease;
-      font: inherit;
+      min-height: 48px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      border: 2px solid transparent;
+      transition: 0.22s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
     }
-    button:hover, .button-link:hover { transform: translateY(-2px); }
-    .primary { background: var(--brand); color: #fff; box-shadow: 0 12px 24px rgba(184, 66, 36, 0.22); }
-    .secondary { background: #f4eadc; color: #5a4b3d; }
-    .dark { background: var(--dark); color: #fff; }
-    .danger { background: #cf3d3d; color: #fff; }
-    .hidden { display: none !important; }
-    .panel-header {
-      background: linear-gradient(135deg, var(--dark), #3b281b);
-      color: #fff;
-      padding: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      transition: 0.45s ease;
+    }
+
+    .btn:hover::before { left: 130%; }
+
+    .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 12px 24px rgba(184, 66, 36, 0.28); }
+    .btn-primary:hover { background: #9b351d; transform: translateY(-2px); }
+    .btn-light { background: #fff; color: #35251a; }
+    .btn-light:hover { background: #f3e7d8; transform: translateY(-2px); }
+    .btn-whatsapp { background: var(--whatsapp); color: #fff; box-shadow: 0 12px 24px rgba(37, 211, 102, 0.26); }
+    .btn-whatsapp:hover { background: #1fb457; transform: translateY(-2px); }
+    .btn-gold { background: var(--gold); color: #fff; box-shadow: 0 12px 24px rgba(216, 154, 22, 0.26); }
+    .btn-gold:hover { background: #bd8310; transform: translateY(-2px); }
+
+    .hero-stats {
+      margin-top: 42px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 16px 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-card strong { display: block; font-size: 25px; line-height: 1; margin-bottom: 7px; }
+    .stat-card span { font-size: 13px; color: #fff1df; }
+
+    section { padding: 76px 20px; }
+    .container { max-width: 1120px; margin: 0 auto; }
+
+    .section-title { text-align: center; margin-bottom: 38px; }
+    .section-title span {
+      display: inline-block;
+      color: var(--brand);
+      font-weight: 900;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1.2px;
+    }
+    .section-title h2 { font-size: clamp(30px, 5vw, 44px); color: var(--dark); }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .intro-card {
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      font-size: 18px;
+      max-width: 920px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-card::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(184, 66, 36, 0.1);
+    }
+
+    .trust-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 18px;
+      margin: 30px auto 0;
+      max-width: 920px;
+    }
+
+    .trust-item {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--soft-shadow);
+      border: 1px solid rgba(255,255,255,0.85);
+    }
+
+    .trust-item strong { display: block; color: var(--brand-dark); font-size: 20px; margin-bottom: 6px; }
+    .trust-item span { color: var(--muted); font-size: 14px; }
+
+    .featured { background: linear-gradient(180deg, var(--cream), #fffaf3); }
+
+    .featured-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+    .dish-card {
+      position: relative;
+      min-height: 360px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      color: #fff;
+      display: flex;
+      align-items: flex-end;
+      background: #2b2118;
+      isolation: isolate;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .dish-card:hover { transform: translateY(-8px); box-shadow: 0 24px 60px rgba(43, 33, 24, 0.18); }
+    .dish-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.35s ease; }
+    .dish-card:hover img { transform: scale(1.08); }
+    .dish-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.82)); z-index: -1; }
+    .dish-content { padding: 26px; }
+    .dish-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32); backdrop-filter: blur(10px); border-radius: 999px; padding: 6px 11px; font-size: 13px; font-weight: 800; margin-bottom: 10px; }
+    .dish-content h3 { font-size: 28px; margin-bottom: 8px; }
+    .dish-content p { color: #fff2e5; margin-bottom: 16px; }
+    .small-link { display: inline-flex; align-items: center; gap: 7px; color: #fff; text-decoration: none; font-weight: 900; }
+
+    .reviews { background: var(--cream-2); }
+
+    .review-grid, .menu-grid, .gallery-grid, .contact-grid { display: grid; gap: 22px; }
+    .review-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .review-card, .menu-card, .contact-card {
+      background: #fff;
+      padding: 26px;
+      border-radius: 22px;
+      box-shadow: var(--soft-shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .review-card:hover, .menu-card:hover, .contact-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+    .stars { color: var(--gold); font-size: 20px; margin-bottom: 12px; letter-spacing: 1px; }
+    .review-card p { color: #40362e; margin-bottom: 18px; }
+    .reviewer { font-weight: 900; color: var(--brand-dark); }
+    .time { color: var(--muted); font-size: 14px; margin-bottom: 8px; }
+
+    .review-actions { margin-top: 28px; display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+
+    .menu-grid { grid-template-columns: repeat(4, 1fr); }
+    .menu-card { position: relative; overflow: hidden; }
+    .menu-card::after { content: ""; position: absolute; right: -40px; bottom: -45px; width: 110px; height: 110px; border-radius: 50%; background: rgba(216, 154, 22, 0.12); transition: 0.25s ease; }
+    .menu-card:hover::after { transform: scale(1.35); }
+    .menu-icon { width: 44px; height: 44px; border-radius: 16px; background: #fff1df; display: grid; place-items: center; margin-bottom: 14px; font-size: 22px; }
+    .menu-card h3 { color: var(--brand); margin-bottom: 12px; font-size: 22px; position: relative; z-index: 1; }
+    .menu-card ul { list-style: none; position: relative; z-index: 1; }
+    .menu-card li { padding: 8px 0; border-bottom: 1px solid #f0e4d7; }
+    .menu-card li:last-child { border-bottom: 0; }
+
+    .about { background: var(--dark); color: #fff; position: relative; overflow: hidden; }
+    .about::before { content: "Hayati"; position: absolute; font-size: 160px; font-weight: 900; opacity: 0.035; top: 20px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+    .about .section-title h2, .about .section-title span { color: #fff; }
+    .about-text { max-width: 900px; margin: 0 auto; font-size: 19px; text-align: center; color: #f7e9d8; position: relative; }
+    .about-text p { margin-bottom: 18px; }
+
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-item { min-height: 230px; border-radius: 24px; overflow: hidden; background: #ddd; box-shadow: var(--soft-shadow); cursor: pointer; position: relative; }
+    .gallery-item::after { content: attr(data-view); position: absolute; inset: 0; display: grid; place-items: center; background: rgba(33, 24, 18, 0.48); color: #fff; font-weight: 900; opacity: 0; transition: 0.22s ease; }
+    .gallery-item:hover::after { opacity: 1; }
+    .gallery-item img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 0.35s ease; }
+    .gallery-item:hover img { transform: scale(1.08); }
+
+    .contact-grid { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+    .contact-card h3 { color: var(--brand); margin-bottom: 16px; font-size: 24px; }
+    .contact-row { padding: 13px 0; border-bottom: 1px solid #f0e4d7; }
+    .contact-row:last-child { border-bottom: 0; }
+    .opening-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+    .opening-table td { padding: 9px 0; border-bottom: 1px solid #f0e4d7; }
+    .opening-table td:last-child { text-align: right; font-weight: 800; }
+
+    .map-box { border-radius: 24px; overflow: hidden; min-height: 320px; box-shadow: var(--shadow); background: #e7ddcf; transform: translateZ(0); }
+    .map-box iframe { width: 100%; height: 370px; border: 0; display: block; filter: saturate(0.95) contrast(1.02); }
+
+    .footer { background: var(--dark); color: #f7e9d8; padding: 34px 20px; text-align: center; font-size: 14px; }
+    .footer a { color: #f7e9d8; text-decoration: underline; margin: 0 8px; }
+    .legal-note { margin-top: 12px; opacity: 0.75; font-size: 13px; }
+
+    .floating-actions {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    body.lang-ar .floating-actions { right: auto; left: 18px; }
+
+    .floating-actions a {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-size: 21px;
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 14px 32px rgba(33, 24, 18, 0.24);
+      transition: 0.22s ease;
+    }
+
+    .floating-actions a.map-float { background: var(--dark); }
+    .floating-actions a.whatsapp-float { background: var(--whatsapp); }
+    .floating-actions a.review-float { background: var(--gold); }
+    .floating-actions a:hover { transform: translateY(-4px) scale(1.03); }
+
+    .install-box {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 101;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(231, 221, 207, 0.9);
+      border-radius: 22px;
+      padding: 14px;
+      width: min(310px, calc(100vw - 36px));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      display: none;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    body.lang-ar .install-box { left: auto; right: 18px; direction: rtl; }
+
+    .install-box.show { display: block; }
+
+    .install-box strong {
+      display: block;
+      color: var(--brand-dark);
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .install-box p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .install-actions {
+      display: flex;
+      gap: 8px;
       flex-wrap: wrap;
     }
-    .panel-header h1 { color: #fff; }
-    .panel-header p { color: #f7e9d8; margin-top: 4px; }
-    .grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 22px;
-      padding: 24px;
+
+    .install-actions button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 900;
     }
-    .card {
-      background: #fff;
-      border: 1px solid #f0e4d7;
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.06);
-    }
-    .card h2 { font-size: 22px; color: var(--brand-dark); margin-bottom: 16px; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .switch-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 14px;
-      background: #fffaf3;
-      border: 1px solid #f0e4d7;
-      border-radius: 18px;
-      margin-bottom: 18px;
-    }
-    .switch-row input { width: auto; transform: scale(1.25); }
-    .preview-box {
-      background: #fffaf3;
-      border: 1px dashed #d7b98e;
-      border-radius: 20px;
-      padding: 18px;
-      line-height: 1.7;
-      color: #3b332c;
-      word-break: break-word;
-    }
-    .preview-box strong { color: var(--brand-dark); }
-    .toast {
+
+    .install-primary { background: var(--brand); color: #fff; }
+    .install-secondary { background: #f4eadc; color: #5a4b3d; }
+
+    .ios-hint {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: var(--dark);
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 102;
+      width: min(420px, calc(100vw - 36px));
+      background: #211812;
       color: #fff;
-      padding: 14px 18px;
-      border-radius: 18px;
+      border-radius: 22px;
+      padding: 16px;
       box-shadow: var(--shadow);
       display: none;
-      z-index: 30;
-    }
-    body.lang-ar .toast { right: auto; left: 20px; }
-    .toast.show { display: block; animation: pop 0.25s ease both; }
-    .note {
-      margin-top: 16px;
-      padding: 14px;
-      background: #fff7e8;
-      border: 1px solid #efd6ab;
-      border-radius: 18px;
-      color: #6a4d25;
-      line-height: 1.6;
+      text-align: center;
       font-size: 14px;
     }
-    @keyframes pop { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @media (max-width: 820px) {
-      body { padding: 14px; }
-      .grid, .row { grid-template-columns: 1fr; }
-      .login { margin: 70px auto 35px; }
-      .language-switch { top: 12px; right: 12px; }
-      body.lang-ar .language-switch { right: auto; left: 12px; }
+
+    .ios-hint.show { display: block; animation: fadeUp 0.35s ease both; }
+    .ios-hint button {
+      margin-top: 10px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox.active { display: flex; animation: fadeIn 0.2s ease both; }
+    .lightbox img { max-width: min(100%, 1000px); max-height: 86vh; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+    .close-lightbox { position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #fff; color: #111; font-size: 26px; cursor: pointer; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+    }
+
+    @media (max-width: 980px) {
+      .nav-inner { flex-wrap: wrap; justify-content: center; }
+      .nav-links { order: 3; width: 100%; justify-content: center; flex-wrap: wrap; }
+    }
+
+    @media (max-width: 900px) {
+      .review-grid, .menu-grid, .gallery-grid, .contact-grid, .featured-grid, .trust-strip { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .topbar { font-size: 13px; }
+      .nav-inner { flex-direction: column; gap: 10px; }
+      .nav-links { gap: 11px; flex-wrap: wrap; justify-content: center; font-size: 14px; }
+      .language-switch { order: 2; }
+      .hero { min-height: 72vh; padding: 70px 16px; }
+      .hero-stats { grid-template-columns: 1fr; max-width: 260px; margin: 34px auto 0; }
+      section { padding: 56px 16px; }
+      .review-grid, .menu-grid, .gallery-grid, .contact-grid, .featured-grid, .trust-strip { grid-template-columns: 1fr; }
+      .intro-card, .review-card, .menu-card, .contact-card { padding: 22px; }
+      .gallery-item { min-height: 230px; }
+      .floating-actions { right: 14px; bottom: 14px; }
+      body.lang-ar .floating-actions { left: 14px; right: auto; }
+      .floating-actions a { width: 48px; height: 48px; }
+      .install-box { left: 14px; bottom: 14px; }
+      body.lang-ar .install-box { right: 14px; left: auto; }
     }
   </style>
 </head>
 <body>
-  <div class="language-switch" aria-label="Sprache wählen">
-    <button type="button" class="active" id="btnDe">DE</button>
-    <button type="button" id="btnAr">عربي</button>
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="topbar"><span class="status-dot"></span><span data-i18n="topbar">Heute bis 23:00 geöffnet · Anrufen: 0221 29817957</span></div>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <div class="brand"><span class="brand-mark">H</span> Hayati</div>
+      <div class="nav-links">
+        <a href="#bewertungen" data-i18n="navReviews">Bewertungen</a>
+        <a href="#speisekarte" data-i18n="navMenu">Speisekarte</a>
+        <a href="#ueber-uns" data-i18n="navAbout">Über uns</a>
+        <a href="#galerie" data-i18n="navGallery">Galerie</a>
+        <a href="#kontakt" data-i18n="navContact">Kontakt</a>
+      </div>
+      <div class="language-switch" aria-label="Sprache wählen">
+        <button type="button" class="active" id="btnDe">DE</button>
+        <button type="button" id="btnAr">عربي</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <small data-i18n="heroSmall">Orientalisches Restaurant in Innenstadt</small>
+      <h1>Hayati</h1>
+      <p data-i18n="heroText">Arabische Speisen im orientalischen Stil – frisch, halal und mitten in Köln.</p>
+      <div class="buttons">
+        <a class="btn btn-primary" href="tel:022129817957" data-i18n="callNow">Jetzt anrufen</a>
+        <a class="btn btn-whatsapp whatsapp-link" href="#" target="_blank" rel="noopener" data-i18n="whatsappBtn">WhatsApp schreiben</a>
+        <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener" data-i18n="routeBtn">Route anzeigen</a>
+      </div>
+
+      <div class="hero-stats" aria-label="Restaurant Informationen">
+        <div class="stat-card"><strong>4.6★</strong><span data-i18n="ratingText">Google Bewertung</span></div>
+        <div class="stat-card"><strong>991+</strong><span data-i18n="reviewsText">Kundenbewertungen</span></div>
+        <div class="stat-card"><strong>100%</strong><span data-i18n="halalText">Halal & frisch</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="intro-card reveal">
+        <strong data-i18n="welcomeTitle">Willkommen bei Hayati Köln.</strong><br />
+        <span data-i18n="welcomeText">Auf der Severinstraße, nahe dem Chlodwigplatz, könnt Ihr Falafel, Hummus, Shawarma, Haloomi und weitere orientalische Spezialitäten genießen.</span>
+        <div class="buttons" style="margin-top: 24px;">
+          <a class="btn btn-primary" href="#speisekarte" data-i18n="menuBtn">Speisekarte ansehen</a>
+          <a class="btn btn-gold review-link" href="#" target="_blank" rel="noopener" data-i18n="reviewBtn">Bewertung schreiben</a>
+        </div>
+      </div>
+
+      <div class="trust-strip reveal">
+        <div class="trust-item"><strong data-i18n="trust1Title">Halal</strong><span data-i18n="trust1Text">Orientalische Spezialitäten</span></div>
+        <div class="trust-item"><strong data-i18n="trust2Title">Innenstadt Köln</strong><span data-i18n="trust2Text">Nahe Chlodwigplatz</span></div>
+        <div class="trust-item"><strong data-i18n="trust3Title">Bis 23:00</strong><span data-i18n="trust3Text">Täglich geöffnet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured" id="empfehlungen">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="featuredSmall">Empfehlungen</span>
+        <h2 data-i18n="featuredTitle">Beliebt bei Hayati</h2>
+      </div>
+
+      <div class="featured-grid">
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Shawarma Teller" />
+          <div class="dish-content">
+            <span class="dish-badge" data-i18n="classicBadge">Klassiker</span>
+            <h3 data-i18n="dish1Title">Shawarma Teller</h3>
+            <p data-i18n="dish1Text">Herzhaft, frisch und ideal für den großen Hunger.</p>
+            <a class="small-link" href="#kontakt" data-i18n="dishRoute">Route öffnen →</a>
+          </div>
+        </div>
+
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Falafel" />
+          <div class="dish-content">
+            <span class="dish-badge" data-i18n="vegBadge">Vegetarisch</span>
+            <h3 data-i18n="dish2Title">Falafel</h3>
+            <p data-i18n="dish2Text">Knusprig, frisch und besonders beliebt bei unseren Gästen.</p>
+            <a class="small-link" href="#speisekarte" data-i18n="dishMenu">Zur Speisekarte →</a>
+          </div>
+        </div>
+
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" />
+          <div class="dish-content">
+            <span class="dish-badge" data-i18n="freshBadge">Frisch</span>
+            <h3 data-i18n="dish3Title">Hummus & Haloomi</h3>
+            <p data-i18n="dish3Text">Orientalischer Geschmack für Fleischliebhaber, Vegetarier und Veganer.</p>
+            <a class="small-link" href="tel:022129817957" data-i18n="dishCall">Jetzt anrufen →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" id="bewertungen">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="reviewsSmall">Kundenbewertungen</span>
+        <h2 data-i18n="reviewsTitle">Das sagen unsere Gäste</h2>
+      </div>
+
+      <div class="review-grid">
+        <div class="review-card reveal">
+          <div class="stars">★★★★★</div>
+          <div class="time">a year ago</div>
+          <p>Everything I’m looking for in a fast meal. Friendly service. Tables in a good environment to sit down and chat. Variety of options, fresh ingredients and great price for large portions.</p>
+          <div class="reviewer">– Cindy L</div>
+        </div>
+
+        <div class="review-card reveal">
+          <div class="stars">★★★★★</div>
+          <div class="time">a month ago</div>
+          <p>My favourite place for food in Köln. The falafel is the best, the staff are friendly and the price is low.</p>
+          <div class="reviewer">– Tom C</div>
+        </div>
+
+        <div class="review-card reveal">
+          <div class="stars">★★★★★</div>
+          <div class="time">3 months ago</div>
+          <p>Really good. I have been suggested to have my first dinner when I arrived in Köln and I continued to go!</p>
+          <div class="reviewer">– Andrea J</div>
+        </div>
+      </div>
+
+      <div class="review-actions reveal">
+        <a class="btn btn-gold review-link" href="#" target="_blank" rel="noopener" data-i18n="reviewBtn">Bewertung schreiben</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="speisekarte">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="menuSmall">Speisekarte</span>
+        <h2 data-i18n="menuTitle">Beliebte Gerichte</h2>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card reveal">
+          <div class="menu-icon">🧆</div>
+          <h3 data-i18n="falafelTitle">Falafel</h3>
+          <ul>
+            <li data-i18n="falafel1">Falafel Sandwich</li>
+            <li data-i18n="falafel2">Falafel Teller</li>
+            <li data-i18n="falafel3">Falafel Box</li>
+          </ul>
+        </div>
+
+        <div class="menu-card reveal">
+          <div class="menu-icon">🥙</div>
+          <h3 data-i18n="shawarmaTitle">Shawarma</h3>
+          <ul>
+            <li data-i18n="shawarma1">Shawarma Sandwich</li>
+            <li data-i18n="shawarma2">Shawarma Teller</li>
+            <li data-i18n="shawarma3">Shawarma Box</li>
+          </ul>
+        </div>
+
+        <div class="menu-card reveal">
+          <div class="menu-icon">🌿</div>
+          <h3 data-i18n="vegTitle">Vegetarisch</h3>
+          <ul>
+            <li data-i18n="veg1">Hummus</li>
+            <li data-i18n="veg2">Haloomi</li>
+            <li data-i18n="veg3">Pommes</li>
+          </ul>
+        </div>
+
+        <div class="menu-card reveal">
+          <div class="menu-icon">🍽️</div>
+          <h3 data-i18n="extrasTitle">Extras</h3>
+          <ul>
+            <li data-i18n="extra1">Fascha</li>
+            <li data-i18n="extra2">Getränke</li>
+            <li data-i18n="extra3">Orientalische Spezialitäten</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="ueber-uns">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="aboutSmall">Über uns</span>
+        <h2 data-i18n="aboutTitle">Arabische Speisen im orientalischen Stil</h2>
+      </div>
+
+      <div class="about-text reveal">
+        <p data-i18n="about1">Ab sofort könnt Ihr auf der Severinstraße, nahe dem Chlodwigplatz, arabische Speisen im orientalischen Stil genießen – alles halal.</p>
+        <p data-i18n="about2">Von Falafel, Hummus, Shawarma und Haloomi bis hin zu Pommes und Fascha: Für jeden ist etwas dabei, egal ob Fleischliebhaber, Vegetarier oder Veganer.</p>
+        <p data-i18n="about3">Bis zu Eurem nächsten Besuch, wir freuen uns auf Euch!</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="galerie">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="gallerySmall">Galerie</span>
+        <h2 data-i18n="galleryTitle">Ein kleiner Eindruck</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Orientalisches Essen" /></div>
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1593001874117-c99c800e3eb8?q=80&w=900&auto=format&fit=crop" alt="Falafel und frische Zutaten" /></div>
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Restaurant Gericht" /></div>
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" /></div>
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1633321702518-7feccafb94d5?q=80&w=900&auto=format&fit=crop" alt="Shawarma" /></div>
+        <div class="gallery-item reveal" data-view="Ansehen"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=900&auto=format&fit=crop" alt="Frisches Essen" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="container">
+      <div class="section-title reveal">
+        <span data-i18n="contactSmall">Kontakt</span>
+        <h2 data-i18n="contactTitle">Besuchen Sie uns</h2>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <h3 data-i18n="contactCardTitle">Kontakt & Adresse</h3>
+          <div class="contact-row"><strong data-i18n="phoneLabel">Telefon:</strong><br /><a href="tel:022129817957">0221 29817957</a></div>
+          <div class="contact-row"><strong data-i18n="addressLabel">Adresse:</strong><br />Severinstraße 52C<br />50678 Köln<br />Deutschland</div>
+          <div class="contact-row">
+            <div class="buttons" style="justify-content:flex-start; margin-top: 8px;">
+              <a class="btn btn-primary" href="tel:022129817957" data-i18n="callNow">Jetzt anrufen</a>
+              <a class="btn btn-whatsapp whatsapp-link" href="#" target="_blank" rel="noopener" data-i18n="whatsappBtn">WhatsApp schreiben</a>
+              <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener" data-i18n="routeBtn">Route anzeigen</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card reveal">
+          <h3 data-i18n="hoursTitle">Öffnungszeiten</h3>
+          <table class="opening-table" id="openingTable">
+            <tr data-day="1"><td data-i18n="mon">Mo</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="2"><td data-i18n="tue">Di</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="3"><td data-i18n="wed">Mi</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="4"><td data-i18n="thu">Do</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="5"><td data-i18n="fri">Fr</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="6"><td data-i18n="sat">Sa</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="0"><td data-i18n="sun">So</td><td>11:00–23:00 Uhr</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="map-box reveal" style="margin-top: 24px;">
+        <iframe title="Hayati Köln Karte" loading="lazy" src="https://www.google.com/maps?q=Severinstra%C3%9Fe%2052C%2C%2050678%20K%C3%B6ln&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div><strong>Hayati</strong> · Severinstraße 52C · 50678 Köln · 0221 29817957</div>
+    <div style="margin-top: 10px;">
+      <a href="#kontakt" data-i18n="navContact">Kontakt</a>
+      <a href="#ueber-uns" data-i18n="navAbout">Über uns</a>
+      <a href="#speisekarte" data-i18n="navMenu">Speisekarte</a>
+      <a class="review-link" href="#" target="_blank" rel="noopener" data-i18n="reviewBtn">Bewertung schreiben</a>
+    </div>
+    <div class="legal-note" data-i18n="legalNote">Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.</div>
+  </footer>
+
+  <div class="install-box" id="installBox">
+    <strong data-i18n="installTitle">Hayati als App speichern</strong>
+    <p data-i18n="installText">Fügen Sie die Website zum Startbildschirm hinzu und öffnen Sie sie wie eine App.</p>
+    <div class="install-actions">
+      <button class="install-primary" id="installBtn" type="button" data-i18n="installBtn">App installieren</button>
+      <button class="install-secondary" id="installClose" type="button" data-i18n="installLater">Später</button>
+    </div>
   </div>
 
-  <main class="shell">
-    <section class="login" id="loginBox">
-      <div class="logo">H</div>
-      <h1 data-i18n="loginTitle">Admin Demo</h1>
-      <p class="subtitle" data-i18n="loginSubtitle">Demo-Verwaltung für Hayati. Diese Seite ist nur zur Präsentation gedacht.</p>
-      <div class="field">
-        <label for="password" data-i18n="passwordLabel">Passwort</label>
-        <input id="password" type="password" data-placeholder-de="Passwort eingeben" data-placeholder-ar="أدخل كلمة المرور" placeholder="Passwort eingeben" />
-      </div>
-      <button class="primary" id="loginBtn" type="button" data-i18n="loginBtn">Einloggen</button>
-      <div class="note"><span data-i18n="demoPassword">Demo-Passwort:</span> <strong>hayati2026</strong></div>
-    </section>
+  <div class="ios-hint" id="iosHint">
+    <div data-i18n="iosHintText">Auf iPhone: Teilen-Symbol antippen und „Zum Home-Bildschirm“ wählen.</div>
+    <button type="button" id="iosHintClose" data-i18n="okBtn">OK</button>
+  </div>
 
-    <section class="panel hidden" id="adminPanel">
-      <div class="panel-header">
-        <div>
-          <h1 data-i18n="panelTitle">Hayati Admin Demo</h1>
-          <p data-i18n="panelSubtitle">Inhalte ändern, speichern und die Website direkt ansehen.</p>
-        </div>
-        <div class="btns">
-          <a class="button-link secondary" href="index.html" target="_blank" data-i18n="openWebsite">Website öffnen</a>
-          <button class="dark" type="button" id="logoutBtn" data-i18n="logoutBtn">Abmelden</button>
-        </div>
-      </div>
+  <div class="floating-actions" aria-label="Schnelle Aktionen">
+    <a href="tel:022129817957" title="Jetzt anrufen">☎</a>
+    <a class="whatsapp-float whatsapp-link" href="#" target="_blank" rel="noopener" title="WhatsApp">☘</a>
+    <a class="review-float review-link" href="#" target="_blank" rel="noopener" title="Bewertung schreiben">★</a>
+    <a class="map-float" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener" title="Route anzeigen">⌖</a>
+  </div>
 
-      <div class="grid">
-        <div class="card">
-          <h2 data-i18n="basicDataTitle">Grunddaten</h2>
-          <div class="row">
-            <div class="field">
-              <label for="restaurantName" data-i18n="restaurantNameLabel">Restaurantname</label>
-              <input id="restaurantName" type="text" />
-            </div>
-            <div class="field">
-              <label for="phoneDisplay" data-i18n="phoneDisplayLabel">Telefon sichtbar</label>
-              <input id="phoneDisplay" type="text" />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="whatsappNumber" data-i18n="whatsappLabel">WhatsApp Nummer international</label>
-            <input id="whatsappNumber" type="text" data-placeholder-de="z. B. 4917612345678" data-placeholder-ar="مثال: 4917612345678" placeholder="z. B. 4917612345678" />
-          </div>
-
-          <div class="field">
-            <label for="topbarText" data-i18n="topbarLabel">Text oben</label>
-            <input id="topbarText" type="text" />
-          </div>
-
-          <div class="field">
-            <label for="heroText" data-i18n="heroTextLabel">Startseiten-Text</label>
-            <textarea id="heroText"></textarea>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2 data-i18n="dailyOfferTitle">Tagesangebot</h2>
-          <div class="switch-row">
-            <div>
-              <strong data-i18n="showOfferTitle">Angebot anzeigen</strong><br />
-              <span style="color: var(--muted);" data-i18n="showOfferSubtitle">Auf der Startseite sichtbar machen</span>
-            </div>
-            <input id="offerActive" type="checkbox" />
-          </div>
-
-          <div class="field">
-            <label for="offerLabel" data-i18n="offerLabelLabel">Kleiner Titel</label>
-            <input id="offerLabel" type="text" />
-          </div>
-
-          <div class="field">
-            <label for="offerTitle" data-i18n="offerTitleLabel">Angebots-Titel</label>
-            <input id="offerTitle" type="text" />
-          </div>
-
-          <div class="field">
-            <label for="offerText" data-i18n="offerTextLabel">Beschreibung</label>
-            <textarea id="offerText"></textarea>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2 data-i18n="previewTitle">Vorschau der gespeicherten Daten</h2>
-          <div class="preview-box" id="previewBox"></div>
-        </div>
-
-        <div class="card">
-          <h2 data-i18n="actionsTitle">Aktionen</h2>
-          <div class="btns">
-            <button class="primary" type="button" id="saveBtn" data-i18n="saveBtn">Änderungen speichern</button>
-            <button class="secondary" type="button" id="loadBtn" data-i18n="reloadBtn">Neu laden</button>
-            <button class="danger" type="button" id="resetBtn" data-i18n="resetBtn">Demo zurücksetzen</button>
-          </div>
-          <div class="note" data-i18n="demoNote">
-            Diese Admin-Seite nutzt localStorage. Das bedeutet: Die Änderungen gelten nur in diesem Browser. Für ein echtes System braucht man später Google Sheets, Firebase, Supabase oder ein Backend.
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <div class="toast" id="toast">Gespeichert</div>
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="close-lightbox" id="closeLightbox" aria-label="Schließen">×</button>
+    <img id="lightboxImage" src="" alt="Galeriebild groß" />
+  </div>
 
   <script>
-    const DEMO_PASSWORD = 'hayati2026';
-    const STORAGE_KEY = 'hayatiAdminSettings';
-    const LOGIN_KEY = 'hayatiAdminLoggedIn';
-    const LANG_KEY = 'hayatiAdminLang';
-
     const translations = {
       de: {
-        loginTitle: 'Admin Demo',
-        loginSubtitle: 'Demo-Verwaltung für Hayati. Diese Seite ist nur zur Präsentation gedacht.',
-        passwordLabel: 'Passwort',
-        loginBtn: 'Einloggen',
-        demoPassword: 'Demo-Passwort:',
-        panelTitle: 'Hayati Admin Demo',
-        panelSubtitle: 'Inhalte ändern, speichern und die Website direkt ansehen.',
-        openWebsite: 'Website öffnen',
-        logoutBtn: 'Abmelden',
-        basicDataTitle: 'Grunddaten',
-        restaurantNameLabel: 'Restaurantname',
-        phoneDisplayLabel: 'Telefon sichtbar',
-        whatsappLabel: 'WhatsApp Nummer international',
-        topbarLabel: 'Text oben',
-        heroTextLabel: 'Startseiten-Text',
-        dailyOfferTitle: 'Tagesangebot',
-        showOfferTitle: 'Angebot anzeigen',
-        showOfferSubtitle: 'Auf der Startseite sichtbar machen',
-        offerLabelLabel: 'Kleiner Titel',
-        offerTitleLabel: 'Angebots-Titel',
-        offerTextLabel: 'Beschreibung',
-        previewTitle: 'Vorschau der gespeicherten Daten',
-        actionsTitle: 'Aktionen',
-        saveBtn: 'Änderungen speichern',
-        reloadBtn: 'Neu laden',
-        resetBtn: 'Demo zurücksetzen',
-        demoNote: 'Diese Admin-Seite nutzt localStorage. Das bedeutet: Die Änderungen gelten nur in diesem Browser. Für ein echtes System braucht man später Google Sheets, Firebase, Supabase oder ein Backend.',
-        savedToast: 'Änderungen gespeichert',
-        wrongPassword: 'Falsches Passwort',
-        resetToast: 'Demo zurückgesetzt',
-        resetConfirm: 'Demo-Daten wirklich zurücksetzen?',
-        previewRestaurant: 'Restaurant',
-        previewPhone: 'Telefon',
-        previewWhatsApp: 'WhatsApp',
-        previewTopbar: 'Oben',
-        previewHero: 'Starttext',
-        previewOfferStatus: 'Tagesangebot',
-        previewOffer: 'Angebot',
-        previewText: 'Text',
-        active: 'aktiv',
-        inactive: 'aus'
+        topbar: 'Heute bis 23:00 geöffnet · Anrufen: 0221 29817957',
+        navReviews: 'Bewertungen', navMenu: 'Speisekarte', navAbout: 'Über uns', navGallery: 'Galerie', navContact: 'Kontakt',
+        heroSmall: 'Orientalisches Restaurant in Innenstadt',
+        heroText: 'Arabische Speisen im orientalischen Stil – frisch, halal und mitten in Köln.',
+        callNow: 'Jetzt anrufen', whatsappBtn: 'WhatsApp schreiben', routeBtn: 'Route anzeigen', reviewBtn: 'Bewertung schreiben',
+        ratingText: 'Google Bewertung', reviewsText: 'Kundenbewertungen', halalText: 'Halal & frisch',
+        welcomeTitle: 'Willkommen bei Hayati Köln.',
+        welcomeText: 'Auf der Severinstraße, nahe dem Chlodwigplatz, könnt Ihr Falafel, Hummus, Shawarma, Haloomi und weitere orientalische Spezialitäten genießen.',
+        menuBtn: 'Speisekarte ansehen',
+        trust1Title: 'Halal', trust1Text: 'Orientalische Spezialitäten', trust2Title: 'Innenstadt Köln', trust2Text: 'Nahe Chlodwigplatz', trust3Title: 'Bis 23:00', trust3Text: 'Täglich geöffnet',
+        featuredSmall: 'Empfehlungen', featuredTitle: 'Beliebt bei Hayati', classicBadge: 'Klassiker', vegBadge: 'Vegetarisch', freshBadge: 'Frisch',
+        dish1Title: 'Shawarma Teller', dish1Text: 'Herzhaft, frisch und ideal für den großen Hunger.', dish2Title: 'Falafel', dish2Text: 'Knusprig, frisch und besonders beliebt bei unseren Gästen.', dish3Title: 'Hummus & Haloomi', dish3Text: 'Orientalischer Geschmack für Fleischliebhaber, Vegetarier und Veganer.',
+        dishRoute: 'Route öffnen →', dishMenu: 'Zur Speisekarte →', dishCall: 'Jetzt anrufen →',
+        reviewsSmall: 'Kundenbewertungen', reviewsTitle: 'Das sagen unsere Gäste',
+        menuSmall: 'Speisekarte', menuTitle: 'Beliebte Gerichte', falafelTitle: 'Falafel', falafel1: 'Falafel Sandwich', falafel2: 'Falafel Teller', falafel3: 'Falafel Box', shawarmaTitle: 'Shawarma', shawarma1: 'Shawarma Sandwich', shawarma2: 'Shawarma Teller', shawarma3: 'Shawarma Box', vegTitle: 'Vegetarisch', veg1: 'Hummus', veg2: 'Haloomi', veg3: 'Pommes', extrasTitle: 'Extras', extra1: 'Fascha', extra2: 'Getränke', extra3: 'Orientalische Spezialitäten',
+        aboutSmall: 'Über uns', aboutTitle: 'Arabische Speisen im orientalischen Stil', about1: 'Ab sofort könnt Ihr auf der Severinstraße, nahe dem Chlodwigplatz, arabische Speisen im orientalischen Stil genießen – alles halal.', about2: 'Von Falafel, Hummus, Shawarma und Haloomi bis hin zu Pommes und Fascha: Für jeden ist etwas dabei, egal ob Fleischliebhaber, Vegetarier oder Veganer.', about3: 'Bis zu Eurem nächsten Besuch, wir freuen uns auf Euch!',
+        gallerySmall: 'Galerie', galleryTitle: 'Ein kleiner Eindruck', contactSmall: 'Kontakt', contactTitle: 'Besuchen Sie uns', contactCardTitle: 'Kontakt & Adresse', phoneLabel: 'Telefon:', addressLabel: 'Adresse:', hoursTitle: 'Öffnungszeiten',
+        mon: 'Mo', tue: 'Di', wed: 'Mi', thu: 'Do', fri: 'Fr', sat: 'Sa', sun: 'So',
+        legalNote: 'Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.',
+        viewImage: 'Ansehen',
+        installTitle: 'Hayati als App speichern',
+        installText: 'Fügen Sie die Website zum Startbildschirm hinzu und öffnen Sie sie wie eine App.',
+        installBtn: 'App installieren',
+        installLater: 'Später',
+        iosHintText: 'Auf iPhone: Teilen-Symbol antippen und „Zum Home-Bildschirm“ wählen.',
+        okBtn: 'OK'
       },
       ar: {
-        loginTitle: 'لوحة التحكم التجريبية',
-        loginSubtitle: 'إدارة تجريبية لموقع Hayati. هذه الصفحة للعرض فقط.',
-        passwordLabel: 'كلمة المرور',
-        loginBtn: 'تسجيل الدخول',
-        demoPassword: 'كلمة مرور الديمو:',
-        panelTitle: 'لوحة تحكم Hayati التجريبية',
-        panelSubtitle: 'عدّل المحتوى واحفظه وافتح الموقع مباشرة.',
-        openWebsite: 'فتح الموقع',
-        logoutBtn: 'تسجيل الخروج',
-        basicDataTitle: 'البيانات الأساسية',
-        restaurantNameLabel: 'اسم المطعم',
-        phoneDisplayLabel: 'رقم الهاتف الظاهر',
-        whatsappLabel: 'رقم واتساب بصيغة دولية',
-        topbarLabel: 'النص العلوي',
-        heroTextLabel: 'نص الصفحة الرئيسية',
-        dailyOfferTitle: 'عرض اليوم',
-        showOfferTitle: 'إظهار العرض',
-        showOfferSubtitle: 'إظهار العرض في الصفحة الرئيسية',
-        offerLabelLabel: 'عنوان صغير',
-        offerTitleLabel: 'عنوان العرض',
-        offerTextLabel: 'الوصف',
-        previewTitle: 'معاينة البيانات المحفوظة',
-        actionsTitle: 'الإجراءات',
-        saveBtn: 'حفظ التعديلات',
-        reloadBtn: 'إعادة التحميل',
-        resetBtn: 'إعادة ضبط الديمو',
-        demoNote: 'هذه الصفحة تستخدم localStorage. هذا يعني أن التعديلات تظهر فقط في نفس المتصفح. للنظام الحقيقي لاحقًا نحتاج Google Sheets أو Firebase أو Supabase أو Backend.',
-        savedToast: 'تم حفظ التعديلات',
-        wrongPassword: 'كلمة المرور غير صحيحة',
-        resetToast: 'تمت إعادة ضبط الديمو',
-        resetConfirm: 'هل تريد فعلًا إعادة ضبط بيانات الديمو؟',
-        previewRestaurant: 'المطعم',
-        previewPhone: 'الهاتف',
-        previewWhatsApp: 'واتساب',
-        previewTopbar: 'النص العلوي',
-        previewHero: 'نص البداية',
-        previewOfferStatus: 'عرض اليوم',
-        previewOffer: 'العرض',
-        previewText: 'النص',
-        active: 'مفعّل',
-        inactive: 'غير مفعّل'
+        topbar: 'مفتوح اليوم حتى 23:00 · اتصال: 0221 29817957',
+        navReviews: 'التقييمات', navMenu: 'قائمة الطعام', navAbout: 'من نحن', navGallery: 'المعرض', navContact: 'التواصل',
+        heroSmall: 'مطعم شرقي في قلب مدينة كولن',
+        heroText: 'أطباق عربية بطابع شرقي — طازجة، حلال، وفي قلب كولن.',
+        callNow: 'اتصل الآن', whatsappBtn: 'راسلنا واتساب', routeBtn: 'افتح الطريق', reviewBtn: 'اكتب تقييمًا',
+        ratingText: 'تقييم Google', reviewsText: 'تقييمات العملاء', halalText: 'حلال وطازج',
+        welcomeTitle: 'أهلًا بكم في Hayati Köln.',
+        welcomeText: 'على شارع Severinstraße بالقرب من Chlodwigplatz يمكنكم الاستمتاع بالفلافل، الحمص، الشاورما، الحلوم والمأكولات الشرقية المتنوعة.',
+        menuBtn: 'عرض قائمة الطعام',
+        trust1Title: 'حلال', trust1Text: 'مأكولات شرقية', trust2Title: 'وسط كولن', trust2Text: 'قريب من Chlodwigplatz', trust3Title: 'حتى 23:00', trust3Text: 'مفتوح يوميًا',
+        featuredSmall: 'اقتراحات', featuredTitle: 'الأكثر طلبًا في Hayati', classicBadge: 'طبق كلاسيكي', vegBadge: 'نباتي', freshBadge: 'طازج',
+        dish1Title: 'طبق شاورما', dish1Text: 'طازج ومشبع ومناسب للوجبة الكبيرة.', dish2Title: 'فلافل', dish2Text: 'مقرمشة وطازجة ومحبوبة جدًا من الزبائن.', dish3Title: 'حمص وحلوم', dish3Text: 'نكهة شرقية مناسبة لمحبي اللحوم والنباتيين.',
+        dishRoute: 'افتح الطريق ←', dishMenu: 'إلى قائمة الطعام ←', dishCall: 'اتصل الآن ←',
+        reviewsSmall: 'تقييمات العملاء', reviewsTitle: 'ماذا يقول ضيوفنا',
+        menuSmall: 'قائمة الطعام', menuTitle: 'أطباق محبوبة', falafelTitle: 'فلافل', falafel1: 'ساندويش فلافل', falafel2: 'طبق فلافل', falafel3: 'بوكس فلافل', shawarmaTitle: 'شاورما', shawarma1: 'ساندويش شاورما', shawarma2: 'طبق شاورما', shawarma3: 'بوكس شاورما', vegTitle: 'نباتي', veg1: 'حمص', veg2: 'حلوم', veg3: 'بطاطا مقلية', extrasTitle: 'إضافات', extra1: 'فشة', extra2: 'مشروبات', extra3: 'مأكولات شرقية',
+        aboutSmall: 'من نحن', aboutTitle: 'أطباق عربية بطابع شرقي', about1: 'يمكنكم الآن الاستمتاع بالمأكولات العربية الشرقية على شارع Severinstraße بالقرب من Chlodwigplatz — جميع الأطباق حلال.', about2: 'من الفلافل والحمص والشاورما والحلوم إلى البطاطا والفشة: لدينا خيارات لمحبي اللحوم والنباتيين.', about3: 'ننتظر زيارتكم القادمة بكل سرور!',
+        gallerySmall: 'المعرض', galleryTitle: 'لمحة عن أجوائنا', contactSmall: 'التواصل', contactTitle: 'زورونا', contactCardTitle: 'التواصل والعنوان', phoneLabel: 'الهاتف:', addressLabel: 'العنوان:', hoursTitle: 'أوقات العمل',
+        mon: 'الإثنين', tue: 'الثلاثاء', wed: 'الأربعاء', thu: 'الخميس', fri: 'الجمعة', sat: 'السبت', sun: 'الأحد',
+        legalNote: 'ملاحظة: يجب إضافة Impressum و Datenschutz قبل النشر الرسمي للموقع.',
+        viewImage: 'عرض الصورة',
+        installTitle: 'احفظ Hayati كتطبيق',
+        installText: 'أضف الموقع إلى الشاشة الرئيسية وافتحه مثل التطبيق.',
+        installBtn: 'تثبيت التطبيق',
+        installLater: 'لاحقًا',
+        iosHintText: 'على iPhone: اضغط زر المشاركة ثم اختر إضافة إلى الشاشة الرئيسية.',
+        okBtn: 'حسنًا'
       }
     };
 
-    const defaultSettings = {
-      restaurantName: 'Hayati',
-      phoneDisplay: '0221 29817957',
-      whatsappNumber: '4922129817957',
-      topbarText: 'Heute bis 23:00 geöffnet · Anrufen: 0221 29817957',
-      heroText: 'Arabische Speisen im orientalischen Stil – frisch, halal und mitten in Köln.',
-      offerActive: true,
-      offerLabel: 'Tagesangebot',
-      offerTitle: 'Shawarma Teller + Getränk',
-      offerText: 'Nur heute als besonderes Angebot. Fragen Sie gern direkt im Restaurant nach.'
-    };
-
-    const fields = [
-      'restaurantName', 'phoneDisplay', 'whatsappNumber', 'topbarText', 'heroText',
-      'offerActive', 'offerLabel', 'offerTitle', 'offerText'
-    ];
-
-    let currentLang = localStorage.getItem(LANG_KEY) || 'de';
-
-    const loginBox = document.getElementById('loginBox');
-    const adminPanel = document.getElementById('adminPanel');
-    const toast = document.getElementById('toast');
-    const previewBox = document.getElementById('previewBox');
+    const progressBar = document.getElementById('progressBar');
+    const navbar = document.getElementById('navbar');
+    const revealItems = document.querySelectorAll('.reveal');
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const galleryBoxes = document.querySelectorAll('.gallery-item');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const closeLightbox = document.getElementById('closeLightbox');
+    const openingRows = document.querySelectorAll('#openingTable tr');
     const btnDe = document.getElementById('btnDe');
     const btnAr = document.getElementById('btnAr');
+    const installBox = document.getElementById('installBox');
+    const installBtn = document.getElementById('installBtn');
+    const installClose = document.getElementById('installClose');
+    const iosHint = document.getElementById('iosHint');
+    const iosHintClose = document.getElementById('iosHintClose');
+    let deferredPrompt = null;
 
-    function t(key) {
-      return translations[currentLang][key] || translations.de[key] || key;
-    }
+    const whatsappNumber = '4922129817957';
+    const whatsappMessage = encodeURIComponent('Hallo Hayati, ich habe eine Frage zu Ihrer Speisekarte.');
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+    const reviewUrl = 'https://www.google.com/search?q=Hayati+Severinstra%C3%9Fe+52C+50678+K%C3%B6ln+Rezension+schreiben';
+
+    document.querySelectorAll('.whatsapp-link').forEach(link => link.href = whatsappUrl);
+    document.querySelectorAll('.review-link').forEach(link => link.href = reviewUrl);
 
     function setLanguage(lang) {
-      currentLang = lang;
-      localStorage.setItem(LANG_KEY, lang);
       document.documentElement.lang = lang === 'ar' ? 'ar' : 'de';
       document.body.classList.toggle('lang-ar', lang === 'ar');
       btnDe.classList.toggle('active', lang === 'de');
@@ -457,118 +1044,108 @@
         if (translations[lang][key]) el.textContent = translations[lang][key];
       });
 
-      document.querySelectorAll('[data-placeholder-de]').forEach((el) => {
-        el.placeholder = lang === 'ar' ? el.dataset.placeholderAr : el.dataset.placeholderDe;
-      });
-
-      updatePreview();
-    }
-
-    function showToast(text) {
-      toast.textContent = text;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 1800);
-    }
-
-    function getSettings() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return { ...defaultSettings };
-      try {
-        return { ...defaultSettings, ...JSON.parse(saved) };
-      } catch {
-        return { ...defaultSettings };
-      }
-    }
-
-    function fillForm() {
-      const settings = getSettings();
-      fields.forEach((field) => {
-        const el = document.getElementById(field);
-        if (!el) return;
-        if (el.type === 'checkbox') el.checked = Boolean(settings[field]);
-        else el.value = settings[field] ?? '';
-      });
-      updatePreview();
-    }
-
-    function collectForm() {
-      const settings = {};
-      fields.forEach((field) => {
-        const el = document.getElementById(field);
-        if (!el) return;
-        settings[field] = el.type === 'checkbox' ? el.checked : el.value.trim();
-      });
-      settings.whatsappNumber = settings.whatsappNumber.replace(/\D/g, '');
-      return settings;
-    }
-
-    function saveSettings() {
-      const settings = collectForm();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-      updatePreview();
-      showToast(t('savedToast'));
-    }
-
-    function updatePreview() {
-      if (!previewBox) return;
-      const s = collectForm();
-      previewBox.innerHTML = `
-        <strong>${t('previewRestaurant')}:</strong> ${s.restaurantName || '-'}<br>
-        <strong>${t('previewPhone')}:</strong> ${s.phoneDisplay || '-'}<br>
-        <strong>${t('previewWhatsApp')}:</strong> ${s.whatsappNumber || '-'}<br>
-        <strong>${t('previewTopbar')}:</strong> ${s.topbarText || '-'}<br>
-        <strong>${t('previewHero')}:</strong> ${s.heroText || '-'}<br>
-        <strong>${t('previewOfferStatus')}:</strong> ${s.offerActive ? t('active') : t('inactive')}<br>
-        <strong>${t('previewOffer')}:</strong> ${s.offerTitle || '-'}<br>
-        <strong>${t('previewText')}:</strong> ${s.offerText || '-'}
-      `;
-    }
-
-    function showPanel() {
-      loginBox.classList.add('hidden');
-      adminPanel.classList.remove('hidden');
-      fillForm();
+      galleryBoxes.forEach(box => box.setAttribute('data-view', translations[lang].viewImage));
+      localStorage.setItem('hayatiLang', lang);
     }
 
     btnDe.addEventListener('click', () => setLanguage('de'));
     btnAr.addEventListener('click', () => setLanguage('ar'));
+    setLanguage(localStorage.getItem('hayatiLang') || 'de');
 
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const password = document.getElementById('password').value;
-      if (password === DEMO_PASSWORD) {
-        localStorage.setItem(LOGIN_KEY, '1');
-        showPanel();
-      } else {
-        showToast(t('wrongPassword'));
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {
+          console.log('Service Worker konnte nicht registriert werden.');
+        });
+      });
+    }
+
+    const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredPrompt = event;
+      if (!localStorage.getItem('hayatiInstallClosed') && !isStandalone) {
+        installBox.classList.add('show');
       }
     });
 
-    document.getElementById('password').addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') document.getElementById('loginBtn').click();
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        installBox.classList.remove('show');
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      } else if (isIos && !isStandalone) {
+        iosHint.classList.add('show');
+      }
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      localStorage.removeItem(LOGIN_KEY);
-      adminPanel.classList.add('hidden');
-      loginBox.classList.remove('hidden');
+    installClose.addEventListener('click', () => {
+      installBox.classList.remove('show');
+      localStorage.setItem('hayatiInstallClosed', '1');
     });
 
-    document.getElementById('saveBtn').addEventListener('click', saveSettings);
-    document.getElementById('loadBtn').addEventListener('click', fillForm);
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      if (!confirm(t('resetConfirm'))) return;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultSettings));
-      fillForm();
-      showToast(t('resetToast'));
+    iosHintClose.addEventListener('click', () => {
+      iosHint.classList.remove('show');
     });
 
-    fields.forEach((field) => {
-      const el = document.getElementById(field);
-      if (el) el.addEventListener('input', updatePreview);
+    if (isIos && !isStandalone && !localStorage.getItem('hayatiInstallClosed')) {
+      setTimeout(() => installBox.classList.add('show'), 1800);
+    }
+
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+      navbar.classList.toggle('scrolled', scrollTop > 30);
+    }
+
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealItems.forEach((item, index) => {
+      item.style.transitionDelay = `${Math.min(index * 35, 220)}ms`;
+      observer.observe(item);
     });
 
-    setLanguage(currentLang);
-    if (localStorage.getItem(LOGIN_KEY) === '1') showPanel();
+    galleryItems.forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImage.src = img.src;
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    function closeGallery() {
+      lightbox.classList.remove('active');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+    }
+
+    closeLightbox.addEventListener('click', closeGallery);
+    lightbox.addEventListener('click', (event) => { if (event.target === lightbox) closeGallery(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeGallery(); });
+
+    const today = new Date().getDay();
+    openingRows.forEach((row) => {
+      if (Number(row.dataset.day) === today) {
+        row.style.background = '#fff1df';
+        row.style.color = '#8d341e';
+        row.style.fontWeight = '900';
+      }
+    });
   </script>
 </body>
 </html>
