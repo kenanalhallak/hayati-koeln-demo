@@ -13,36 +13,111 @@
       padding: 0;
     }
 
+    :root {
+      --dark: #211812;
+      --dark-2: #2b2118;
+      --cream: #f7f3ec;
+      --cream-2: #fffaf3;
+      --white: #ffffff;
+      --text: #2b2b2b;
+      --muted: #7b7067;
+      --brand: #b84224;
+      --brand-dark: #8d341e;
+      --gold: #d89a16;
+      --shadow: 0 18px 45px rgba(43, 33, 24, 0.12);
+      --soft-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      --radius: 24px;
+    }
+
     html {
       scroll-behavior: smooth;
     }
 
     body {
       font-family: Arial, Helvetica, sans-serif;
-      background: #f7f3ec;
-      color: #2b2b2b;
+      background: var(--cream);
+      color: var(--text);
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
     a {
       color: inherit;
     }
 
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      z-index: -1;
+      filter: blur(18px);
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    body::before {
+      background: var(--brand);
+      top: 120px;
+      left: -180px;
+    }
+
+    body::after {
+      background: var(--gold);
+      bottom: 70px;
+      right: -170px;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--gold));
+      z-index: 999;
+      transition: width 0.08s linear;
+    }
+
     .topbar {
-      background: #2b2118;
+      background: var(--dark);
       color: #fff;
       padding: 10px 18px;
       text-align: center;
       font-size: 14px;
     }
 
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #37d67a;
+      margin-right: 7px;
+      box-shadow: 0 0 0 0 rgba(55, 214, 122, 0.65);
+      animation: pulse 1.9s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(55, 214, 122, 0.65); }
+      70% { box-shadow: 0 0 0 10px rgba(55, 214, 122, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(55, 214, 122, 0); }
+    }
+
     .navbar {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(255, 255, 255, 0.96);
-      border-bottom: 1px solid #e7ddcf;
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(231, 221, 207, 0.8);
+      backdrop-filter: blur(16px);
+      transition: 0.25s ease;
+    }
+
+    .navbar.scrolled {
+      box-shadow: 0 10px 30px rgba(43, 33, 24, 0.08);
     }
 
     .nav-inner {
@@ -56,44 +131,103 @@
 
     .brand {
       font-size: 24px;
-      font-weight: 800;
-      color: #8d341e;
+      font-weight: 900;
+      color: var(--brand-dark);
       letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      display: inline-grid;
+      place-items: center;
+      color: #fff;
+      font-size: 17px;
+      background: linear-gradient(135deg, var(--brand), var(--gold));
+      box-shadow: 0 8px 18px rgba(184, 66, 36, 0.25);
     }
 
     .nav-links {
       display: flex;
       gap: 18px;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .nav-links a {
       text-decoration: none;
       color: #3b332c;
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--brand);
+      transition: width 0.2s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
     .hero {
-      min-height: 78vh;
+      min-height: 82vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       padding: 90px 20px;
       color: #fff;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
       background:
-        linear-gradient(rgba(34, 21, 12, 0.62), rgba(34, 21, 12, 0.62)),
-        url("https://images.unsplash.com/photo-1542528180-a1208c5169a5?q=80&w=1600&auto=format&fit=crop") center/cover no-repeat;
+        linear-gradient(rgba(34, 21, 12, 0.66), rgba(34, 21, 12, 0.7)),
+        url("https://images.unsplash.com/photo-1542528180-a1208c5169a5?q=80&w=1800&auto=format&fit=crop") center/cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -20px;
+      background: inherit;
+      z-index: -2;
+      animation: heroZoom 14s ease-in-out infinite alternate;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.35) 72%);
+      z-index: -1;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
     }
 
     .hero-content {
-      max-width: 850px;
+      max-width: 900px;
+      animation: fadeUp 0.9s ease both;
     }
 
     .hero small {
       display: inline-block;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(10px);
       padding: 8px 14px;
       border-radius: 999px;
       margin-bottom: 18px;
@@ -101,10 +235,11 @@
     }
 
     .hero h1 {
-      font-size: clamp(46px, 9vw, 86px);
+      font-size: clamp(50px, 10vw, 96px);
       line-height: 1;
       margin-bottom: 14px;
       letter-spacing: 1px;
+      text-shadow: 0 10px 35px rgba(0,0,0,0.3);
     }
 
     .hero p {
@@ -129,19 +264,37 @@
       padding: 13px 22px;
       border-radius: 999px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 800;
       border: 2px solid transparent;
-      transition: 0.2s ease;
+      transition: 0.22s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+      transition: 0.45s ease;
+    }
+
+    .btn:hover::before {
+      left: 130%;
     }
 
     .btn-primary {
-      background: #b84224;
+      background: var(--brand);
       color: #fff;
+      box-shadow: 0 12px 24px rgba(184, 66, 36, 0.28);
     }
 
     .btn-primary:hover {
       background: #9b351d;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
     }
 
     .btn-light {
@@ -151,11 +304,38 @@
 
     .btn-light:hover {
       background: #f3e7d8;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      margin-top: 42px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 14px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 16px 14px;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 25px;
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+
+    .stat-card span {
+      font-size: 13px;
+      color: #fff1df;
     }
 
     section {
-      padding: 70px 20px;
+      padding: 76px 20px;
     }
 
     .container {
@@ -170,8 +350,8 @@
 
     .section-title span {
       display: inline-block;
-      color: #b84224;
-      font-weight: 800;
+      color: var(--brand);
+      font-weight: 900;
       margin-bottom: 6px;
       text-transform: uppercase;
       font-size: 13px;
@@ -180,22 +360,47 @@
 
     .section-title h2 {
       font-size: clamp(30px, 5vw, 44px);
-      color: #2b2118;
+      color: var(--dark);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .intro-card {
-      background: #fff;
-      border-radius: 24px;
-      padding: 34px;
-      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
       text-align: center;
       font-size: 18px;
-      max-width: 900px;
+      max-width: 920px;
       margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-card::before {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(184, 66, 36, 0.1);
     }
 
     .reviews {
-      background: #fffaf3;
+      background: var(--cream-2);
     }
 
     .review-grid,
@@ -216,13 +421,23 @@
       background: #fff;
       padding: 26px;
       border-radius: 22px;
-      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      box-shadow: var(--soft-shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .review-card:hover,
+    .menu-card:hover,
+    .contact-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
     }
 
     .stars {
-      color: #d89a16;
+      color: var(--gold);
       font-size: 20px;
       margin-bottom: 12px;
+      letter-spacing: 1px;
     }
 
     .review-card p {
@@ -231,12 +446,12 @@
     }
 
     .reviewer {
-      font-weight: 800;
-      color: #8d341e;
+      font-weight: 900;
+      color: var(--brand-dark);
     }
 
     .time {
-      color: #7b7067;
+      color: var(--muted);
       font-size: 14px;
       margin-bottom: 8px;
     }
@@ -245,14 +460,50 @@
       grid-template-columns: repeat(4, 1fr);
     }
 
+    .menu-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      bottom: -45px;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(216, 154, 22, 0.12);
+      transition: 0.25s ease;
+    }
+
+    .menu-card:hover::after {
+      transform: scale(1.35);
+    }
+
+    .menu-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: #fff1df;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      font-size: 22px;
+    }
+
     .menu-card h3 {
-      color: #b84224;
+      color: var(--brand);
       margin-bottom: 12px;
       font-size: 22px;
+      position: relative;
+      z-index: 1;
     }
 
     .menu-card ul {
       list-style: none;
+      position: relative;
+      z-index: 1;
     }
 
     .menu-card li {
@@ -265,8 +516,22 @@
     }
 
     .about {
-      background: #2b2118;
+      background: var(--dark);
       color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about::before {
+      content: "Hayati";
+      position: absolute;
+      font-size: 160px;
+      font-weight: 900;
+      opacity: 0.035;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
     }
 
     .about .section-title h2,
@@ -280,6 +545,7 @@
       font-size: 19px;
       text-align: center;
       color: #f7e9d8;
+      position: relative;
     }
 
     .about-text p {
@@ -291,11 +557,30 @@
     }
 
     .gallery-item {
-      min-height: 220px;
+      min-height: 230px;
       border-radius: 24px;
       overflow: hidden;
       background: #ddd;
-      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      box-shadow: var(--soft-shadow);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gallery-item::after {
+      content: "Ansehen";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(33, 24, 18, 0.48);
+      color: #fff;
+      font-weight: 900;
+      opacity: 0;
+      transition: 0.22s ease;
+    }
+
+    .gallery-item:hover::after {
+      opacity: 1;
     }
 
     .gallery-item img {
@@ -303,11 +588,11 @@
       height: 100%;
       display: block;
       object-fit: cover;
-      transition: 0.25s ease;
+      transition: transform 0.35s ease;
     }
 
-    .gallery-item img:hover {
-      transform: scale(1.04);
+    .gallery-item:hover img {
+      transform: scale(1.08);
     }
 
     .contact-grid {
@@ -316,7 +601,7 @@
     }
 
     .contact-card h3 {
-      color: #b84224;
+      color: var(--brand);
       margin-bottom: 16px;
       font-size: 24px;
     }
@@ -343,26 +628,28 @@
 
     .opening-table td:last-child {
       text-align: right;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .map-box {
       border-radius: 24px;
       overflow: hidden;
       min-height: 320px;
-      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      box-shadow: var(--shadow);
       background: #e7ddcf;
+      transform: translateZ(0);
     }
 
     .map-box iframe {
       width: 100%;
-      height: 360px;
+      height: 370px;
       border: 0;
       display: block;
+      filter: saturate(0.95) contrast(1.02);
     }
 
     .footer {
-      background: #211812;
+      background: var(--dark);
       color: #f7e9d8;
       padding: 34px 20px;
       text-align: center;
@@ -379,6 +666,94 @@
       margin-top: 12px;
       opacity: 0.75;
       font-size: 13px;
+    }
+
+    .floating-actions {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .floating-actions a {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-size: 21px;
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 14px 32px rgba(33, 24, 18, 0.24);
+      transition: 0.22s ease;
+    }
+
+    .floating-actions a:nth-child(2) {
+      background: var(--dark);
+    }
+
+    .floating-actions a:hover {
+      transform: translateY(-4px) scale(1.03);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      display: flex;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    .lightbox img {
+      max-width: min(100%, 1000px);
+      max-height: 86vh;
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      color: #111;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
     }
 
     @media (max-width: 900px) {
@@ -408,12 +783,18 @@
       }
 
       .hero {
-        min-height: 68vh;
+        min-height: 72vh;
         padding: 70px 16px;
       }
 
+      .hero-stats {
+        grid-template-columns: 1fr;
+        max-width: 260px;
+        margin: 34px auto 0;
+      }
+
       section {
-        padding: 54px 16px;
+        padding: 56px 16px;
       }
 
       .review-grid,
@@ -433,15 +814,27 @@
       .gallery-item {
         min-height: 230px;
       }
+
+      .floating-actions {
+        right: 14px;
+        bottom: 14px;
+      }
+
+      .floating-actions a {
+        width: 48px;
+        height: 48px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">Heute bis 23:00 geöffnet · Anrufen: 0221 29817957</div>
+  <div class="progress-bar" id="progressBar"></div>
 
-  <nav class="navbar">
+  <div class="topbar"><span class="status-dot"></span>Heute bis 23:00 geöffnet · Anrufen: 0221 29817957</div>
+
+  <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <div class="brand">Hayati</div>
+      <div class="brand"><span class="brand-mark">H</span> Hayati</div>
       <div class="nav-links">
         <a href="#bewertungen">Bewertungen</a>
         <a href="#speisekarte">Speisekarte</a>
@@ -461,12 +854,18 @@
         <a class="btn btn-primary" href="tel:022129817957">Jetzt anrufen</a>
         <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener">Route anzeigen</a>
       </div>
+
+      <div class="hero-stats" aria-label="Restaurant Informationen">
+        <div class="stat-card"><strong>4.6★</strong><span>Google Bewertung</span></div>
+        <div class="stat-card"><strong>991+</strong><span>Kundenbewertungen</span></div>
+        <div class="stat-card"><strong>100%</strong><span>Halal & frisch</span></div>
+      </div>
     </div>
   </header>
 
   <section>
     <div class="container">
-      <div class="intro-card">
+      <div class="intro-card reveal">
         <strong>Willkommen bei Hayati Köln.</strong><br />
         Auf der Severinstraße, nahe dem Chlodwigplatz, könnt Ihr Falafel, Hummus, Shawarma, Haloomi und weitere orientalische Spezialitäten genießen.
       </div>
@@ -475,27 +874,27 @@
 
   <section class="reviews" id="bewertungen">
     <div class="container">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span>Kundenbewertungen</span>
         <h2>Das sagen unsere Gäste</h2>
       </div>
 
       <div class="review-grid">
-        <div class="review-card">
+        <div class="review-card reveal">
           <div class="stars">★★★★★</div>
           <div class="time">a year ago</div>
           <p>Everything I’m looking for in a fast meal. Friendly service. Tables in a good environment to sit down and chat. Variety of options, fresh ingredients and great price for large portions.</p>
           <div class="reviewer">– Cindy L</div>
         </div>
 
-        <div class="review-card">
+        <div class="review-card reveal">
           <div class="stars">★★★★★</div>
           <div class="time">a month ago</div>
           <p>My favourite place for food in Köln. The falafel is the best, the staff are friendly and the price is low.</p>
           <div class="reviewer">– Tom C</div>
         </div>
 
-        <div class="review-card">
+        <div class="review-card reveal">
           <div class="stars">★★★★★</div>
           <div class="time">3 months ago</div>
           <p>Really good. I have been suggested to have my first dinner when I arrived in Köln and I continued to go!</p>
@@ -507,13 +906,14 @@
 
   <section id="speisekarte">
     <div class="container">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span>Speisekarte</span>
         <h2>Beliebte Gerichte</h2>
       </div>
 
       <div class="menu-grid">
-        <div class="menu-card">
+        <div class="menu-card reveal">
+          <div class="menu-icon">🧆</div>
           <h3>Falafel</h3>
           <ul>
             <li>Falafel Sandwich</li>
@@ -522,7 +922,8 @@
           </ul>
         </div>
 
-        <div class="menu-card">
+        <div class="menu-card reveal">
+          <div class="menu-icon">🥙</div>
           <h3>Shawarma</h3>
           <ul>
             <li>Shawarma Sandwich</li>
@@ -531,7 +932,8 @@
           </ul>
         </div>
 
-        <div class="menu-card">
+        <div class="menu-card reveal">
+          <div class="menu-icon">🌿</div>
           <h3>Vegetarisch</h3>
           <ul>
             <li>Hummus</li>
@@ -540,7 +942,8 @@
           </ul>
         </div>
 
-        <div class="menu-card">
+        <div class="menu-card reveal">
+          <div class="menu-icon">🍽️</div>
           <h3>Extras</h3>
           <ul>
             <li>Fascha</li>
@@ -554,12 +957,12 @@
 
   <section class="about" id="ueber-uns">
     <div class="container">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span>Über uns</span>
         <h2>Arabische Speisen im orientalischen Stil</h2>
       </div>
 
-      <div class="about-text">
+      <div class="about-text reveal">
         <p>Ab sofort könnt Ihr auf der Severinstraße, nahe dem Chlodwigplatz, arabische Speisen im orientalischen Stil genießen – alles halal.</p>
         <p>Von Falafel, Hummus, Shawarma und Haloomi bis hin zu Pommes und Fascha: Für jeden ist etwas dabei, egal ob Fleischliebhaber, Vegetarier oder Veganer.</p>
         <p>Bis zu Eurem nächsten Besuch, wir freuen uns auf Euch!</p>
@@ -569,31 +972,31 @@
 
   <section id="galerie">
     <div class="container">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span>Galerie</span>
         <h2>Ein kleiner Eindruck</h2>
       </div>
 
       <div class="gallery-grid">
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Orientalisches Essen" /></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1593001874117-c99c800e3eb8?q=80&w=900&auto=format&fit=crop" alt="Falafel und frische Zutaten" /></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Restaurant Gericht" /></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" /></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1633321702518-7feccafb94d5?q=80&w=900&auto=format&fit=crop" alt="Shawarma" /></div>
-        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=900&auto=format&fit=crop" alt="Frisches Essen" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Orientalisches Essen" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1593001874117-c99c800e3eb8?q=80&w=900&auto=format&fit=crop" alt="Falafel und frische Zutaten" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Restaurant Gericht" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1633321702518-7feccafb94d5?q=80&w=900&auto=format&fit=crop" alt="Shawarma" /></div>
+        <div class="gallery-item reveal"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=900&auto=format&fit=crop" alt="Frisches Essen" /></div>
       </div>
     </div>
   </section>
 
   <section id="kontakt">
     <div class="container">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span>Kontakt</span>
         <h2>Besuchen Sie uns</h2>
       </div>
 
       <div class="contact-grid">
-        <div class="contact-card">
+        <div class="contact-card reveal">
           <h3>Kontakt & Adresse</h3>
           <div class="contact-row"><strong>Telefon:</strong><br /><a href="tel:022129817957">0221 29817957</a></div>
           <div class="contact-row"><strong>Adresse:</strong><br />Severinstraße 52C<br />50678 Köln<br />Deutschland</div>
@@ -605,7 +1008,7 @@
           </div>
         </div>
 
-        <div class="contact-card">
+        <div class="contact-card reveal">
           <h3>Öffnungszeiten</h3>
           <table class="opening-table">
             <tr><td>Mo</td><td>11:00–23:00 Uhr</td></tr>
@@ -619,7 +1022,7 @@
         </div>
       </div>
 
-      <div class="map-box" style="margin-top: 24px;">
+      <div class="map-box reveal" style="margin-top: 24px;">
         <iframe title="Hayati Köln Karte" loading="lazy" src="https://www.google.com/maps?q=Severinstra%C3%9Fe%2052C%2C%2050678%20K%C3%B6ln&output=embed"></iframe>
       </div>
     </div>
@@ -634,5 +1037,73 @@
     </div>
     <div class="legal-note">Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.</div>
   </footer>
+
+  <div class="floating-actions" aria-label="Schnelle Aktionen">
+    <a href="tel:022129817957" title="Jetzt anrufen">☎</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener" title="Route anzeigen">⌖</a>
+  </div>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="close-lightbox" id="closeLightbox" aria-label="Schließen">×</button>
+    <img id="lightboxImage" src="" alt="Galeriebild groß" />
+  </div>
+
+  <script>
+    const progressBar = document.getElementById('progressBar');
+    const navbar = document.getElementById('navbar');
+    const revealItems = document.querySelectorAll('.reveal');
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const closeLightbox = document.getElementById('closeLightbox');
+
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = progress + '%';
+      navbar.classList.toggle('scrolled', scrollTop > 30);
+    }
+
+    window.addEventListener('scroll', updateProgress);
+    updateProgress();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealItems.forEach((item, index) => {
+      item.style.transitionDelay = `${Math.min(index * 35, 220)}ms`;
+      observer.observe(item);
+    });
+
+    galleryItems.forEach((img) => {
+      img.addEventListener('click', () => {
+        lightboxImage.src = img.src;
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    function closeGallery() {
+      lightbox.classList.remove('active');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+    }
+
+    closeLightbox.addEventListener('click', closeGallery);
+    lightbox.addEventListener('click', (event) => {
+      if (event.target === lightbox) closeGallery();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeGallery();
+    });
+  </script>
 </body>
 </html>
