@@ -399,6 +399,121 @@
       background: rgba(184, 66, 36, 0.1);
     }
 
+    .trust-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin: 30px auto 0;
+      max-width: 920px;
+    }
+
+    .trust-item {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--soft-shadow);
+      border: 1px solid rgba(255,255,255,0.85);
+    }
+
+    .trust-item strong {
+      display: block;
+      color: var(--brand-dark);
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .trust-item span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .featured {
+      background: linear-gradient(180deg, var(--cream), #fffaf3);
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .dish-card {
+      position: relative;
+      min-height: 360px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      color: #fff;
+      display: flex;
+      align-items: flex-end;
+      background: #2b2118;
+      isolation: isolate;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .dish-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(43, 33, 24, 0.18);
+    }
+
+    .dish-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      transition: transform 0.35s ease;
+    }
+
+    .dish-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .dish-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.82));
+      z-index: -1;
+    }
+
+    .dish-content {
+      padding: 26px;
+    }
+
+    .dish-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.32);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .dish-content h3 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .dish-content p {
+      color: #fff2e5;
+      margin-bottom: 16px;
+    }
+
+    .small-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 900;
+    }
+
     .reviews {
       background: var(--cream-2);
     }
@@ -760,7 +875,9 @@
       .review-grid,
       .menu-grid,
       .gallery-grid,
-      .contact-grid {
+      .contact-grid,
+      .featured-grid,
+      .trust-strip {
         grid-template-columns: 1fr 1fr;
       }
     }
@@ -800,7 +917,9 @@
       .review-grid,
       .menu-grid,
       .gallery-grid,
-      .contact-grid {
+      .contact-grid,
+      .featured-grid,
+      .trust-strip {
         grid-template-columns: 1fr;
       }
 
@@ -868,6 +987,57 @@
       <div class="intro-card reveal">
         <strong>Willkommen bei Hayati Köln.</strong><br />
         Auf der Severinstraße, nahe dem Chlodwigplatz, könnt Ihr Falafel, Hummus, Shawarma, Haloomi und weitere orientalische Spezialitäten genießen.
+        <div class="buttons" style="margin-top: 24px;">
+          <a class="btn btn-primary" href="#speisekarte">Speisekarte ansehen</a>
+          <a class="btn btn-light" href="#galerie">Galerie ansehen</a>
+        </div>
+      </div>
+
+      <div class="trust-strip reveal">
+        <div class="trust-item"><strong>Halal</strong><span>Orientalische Spezialitäten</span></div>
+        <div class="trust-item"><strong>Innenstadt Köln</strong><span>Nahe Chlodwigplatz</span></div>
+        <div class="trust-item"><strong>Bis 23:00</strong><span>Täglich geöffnet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured" id="empfehlungen">
+    <div class="container">
+      <div class="section-title reveal">
+        <span>Empfehlungen</span>
+        <h2>Beliebt bei Hayati</h2>
+      </div>
+
+      <div class="featured-grid">
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Shawarma Teller" />
+          <div class="dish-content">
+            <span class="dish-badge">Klassiker</span>
+            <h3>Shawarma Teller</h3>
+            <p>Herzhaft, frisch und ideal für den großen Hunger.</p>
+            <a class="small-link" href="#kontakt">Route öffnen →</a>
+          </div>
+        </div>
+
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Falafel" />
+          <div class="dish-content">
+            <span class="dish-badge">Vegetarisch</span>
+            <h3>Falafel</h3>
+            <p>Knusprig, frisch und besonders beliebt bei unseren Gästen.</p>
+            <a class="small-link" href="#speisekarte">Zur Speisekarte →</a>
+          </div>
+        </div>
+
+        <div class="dish-card reveal">
+          <img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" />
+          <div class="dish-content">
+            <span class="dish-badge">Frisch</span>
+            <h3>Hummus & Haloomi</h3>
+            <p>Orientalischer Geschmack für Fleischliebhaber, Vegetarier und Veganer.</p>
+            <a class="small-link" href="tel:022129817957">Jetzt anrufen →</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1010,14 +1180,14 @@
 
         <div class="contact-card reveal">
           <h3>Öffnungszeiten</h3>
-          <table class="opening-table">
-            <tr><td>Mo</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>Di</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>Mi</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>Do</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>Fr</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>Sa</td><td>11:00–23:00 Uhr</td></tr>
-            <tr><td>So</td><td>11:00–23:00 Uhr</td></tr>
+          <table class="opening-table" id="openingTable">
+            <tr data-day="1"><td>Mo</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="2"><td>Di</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="3"><td>Mi</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="4"><td>Do</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="5"><td>Fr</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="6"><td>Sa</td><td>11:00–23:00 Uhr</td></tr>
+            <tr data-day="0"><td>So</td><td>11:00–23:00 Uhr</td></tr>
           </table>
         </div>
       </div>
@@ -1056,6 +1226,7 @@
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightboxImage');
     const closeLightbox = document.getElementById('closeLightbox');
+    const openingRows = document.querySelectorAll('#openingTable tr');
 
     function updateProgress() {
       const scrollTop = window.scrollY;
@@ -1103,6 +1274,15 @@
 
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeGallery();
+    });
+
+    const today = new Date().getDay();
+    openingRows.forEach((row) => {
+      if (Number(row.dataset.day) === today) {
+        row.style.background = '#fff1df';
+        row.style.color = '#8d341e';
+        row.style.fontWeight = '900';
+      }
     });
   </script>
 </body>
