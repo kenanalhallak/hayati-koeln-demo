@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hayati – Orientalisches Restaurant in Köln</title>
   <meta name="description" content="Hayati Köln – Orientalisches Restaurant auf der Severinstraße nahe Chlodwigplatz. Falafel, Hummus, Shawarma, Haloumi und mehr." />
+  <meta name="theme-color" content="#b84224" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Hayati" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -524,6 +531,83 @@
     .floating-actions a.review-float { background: var(--gold); }
     .floating-actions a:hover { transform: translateY(-4px) scale(1.03); }
 
+    .install-box {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 101;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(231, 221, 207, 0.9);
+      border-radius: 22px;
+      padding: 14px;
+      width: min(310px, calc(100vw - 36px));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      display: none;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    body.lang-ar .install-box { left: auto; right: 18px; direction: rtl; }
+
+    .install-box.show { display: block; }
+
+    .install-box strong {
+      display: block;
+      color: var(--brand-dark);
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .install-box p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .install-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .install-actions button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .install-primary { background: var(--brand); color: #fff; }
+    .install-secondary { background: #f4eadc; color: #5a4b3d; }
+
+    .ios-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 102;
+      width: min(420px, calc(100vw - 36px));
+      background: #211812;
+      color: #fff;
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: none;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .ios-hint.show { display: block; animation: fadeUp 0.35s ease both; }
+    .ios-hint button {
+      margin-top: 10px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
     .lightbox.active { display: flex; animation: fadeIn 0.2s ease both; }
     .lightbox img { max-width: min(100%, 1000px); max-height: 86vh; border-radius: 18px; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
@@ -559,6 +643,8 @@
       .floating-actions { right: 14px; bottom: 14px; }
       body.lang-ar .floating-actions { left: 14px; right: auto; }
       .floating-actions a { width: 48px; height: 48px; }
+      .install-box { left: 14px; bottom: 14px; }
+      body.lang-ar .install-box { right: 14px; left: auto; }
     }
   </style>
 </head>
@@ -835,6 +921,20 @@
     <div class="legal-note" data-i18n="legalNote">Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.</div>
   </footer>
 
+  <div class="install-box" id="installBox">
+    <strong data-i18n="installTitle">Hayati als App speichern</strong>
+    <p data-i18n="installText">Fügen Sie die Website zum Startbildschirm hinzu und öffnen Sie sie wie eine App.</p>
+    <div class="install-actions">
+      <button class="install-primary" id="installBtn" type="button" data-i18n="installBtn">App installieren</button>
+      <button class="install-secondary" id="installClose" type="button" data-i18n="installLater">Später</button>
+    </div>
+  </div>
+
+  <div class="ios-hint" id="iosHint">
+    <div data-i18n="iosHintText">Auf iPhone: Teilen-Symbol antippen und „Zum Home-Bildschirm“ wählen.</div>
+    <button type="button" id="iosHintClose" data-i18n="okBtn">OK</button>
+  </div>
+
   <div class="floating-actions" aria-label="Schnelle Aktionen">
     <a href="tel:022129817957" title="Jetzt anrufen">☎</a>
     <a class="whatsapp-float whatsapp-link" href="#" target="_blank" rel="noopener" title="WhatsApp">☘</a>
@@ -869,7 +969,13 @@
         gallerySmall: 'Galerie', galleryTitle: 'Ein kleiner Eindruck', contactSmall: 'Kontakt', contactTitle: 'Besuchen Sie uns', contactCardTitle: 'Kontakt & Adresse', phoneLabel: 'Telefon:', addressLabel: 'Adresse:', hoursTitle: 'Öffnungszeiten',
         mon: 'Mo', tue: 'Di', wed: 'Mi', thu: 'Do', fri: 'Fr', sat: 'Sa', sun: 'So',
         legalNote: 'Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.',
-        viewImage: 'Ansehen'
+        viewImage: 'Ansehen',
+        installTitle: 'Hayati als App speichern',
+        installText: 'Fügen Sie die Website zum Startbildschirm hinzu und öffnen Sie sie wie eine App.',
+        installBtn: 'App installieren',
+        installLater: 'Später',
+        iosHintText: 'Auf iPhone: Teilen-Symbol antippen und „Zum Home-Bildschirm“ wählen.',
+        okBtn: 'OK'
       },
       ar: {
         topbar: 'مفتوح اليوم حتى 23:00 · اتصال: 0221 29817957',
@@ -891,7 +997,13 @@
         gallerySmall: 'المعرض', galleryTitle: 'لمحة عن أجوائنا', contactSmall: 'التواصل', contactTitle: 'زورونا', contactCardTitle: 'التواصل والعنوان', phoneLabel: 'الهاتف:', addressLabel: 'العنوان:', hoursTitle: 'أوقات العمل',
         mon: 'الإثنين', tue: 'الثلاثاء', wed: 'الأربعاء', thu: 'الخميس', fri: 'الجمعة', sat: 'السبت', sun: 'الأحد',
         legalNote: 'ملاحظة: يجب إضافة Impressum و Datenschutz قبل النشر الرسمي للموقع.',
-        viewImage: 'عرض الصورة'
+        viewImage: 'عرض الصورة',
+        installTitle: 'احفظ Hayati كتطبيق',
+        installText: 'أضف الموقع إلى الشاشة الرئيسية وافتحه مثل التطبيق.',
+        installBtn: 'تثبيت التطبيق',
+        installLater: 'لاحقًا',
+        iosHintText: 'على iPhone: اضغط زر المشاركة ثم اختر إضافة إلى الشاشة الرئيسية.',
+        okBtn: 'حسنًا'
       }
     };
 
@@ -906,6 +1018,12 @@
     const openingRows = document.querySelectorAll('#openingTable tr');
     const btnDe = document.getElementById('btnDe');
     const btnAr = document.getElementById('btnAr');
+    const installBox = document.getElementById('installBox');
+    const installBtn = document.getElementById('installBtn');
+    const installClose = document.getElementById('installClose');
+    const iosHint = document.getElementById('iosHint');
+    const iosHintClose = document.getElementById('iosHintClose');
+    let deferredPrompt = null;
 
     const whatsappNumber = '4922129817957';
     const whatsappMessage = encodeURIComponent('Hallo Hayati, ich habe eine Frage zu Ihrer Speisekarte.');
@@ -933,6 +1051,49 @@
     btnDe.addEventListener('click', () => setLanguage('de'));
     btnAr.addEventListener('click', () => setLanguage('ar'));
     setLanguage(localStorage.getItem('hayatiLang') || 'de');
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {
+          console.log('Service Worker konnte nicht registriert werden.');
+        });
+      });
+    }
+
+    const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredPrompt = event;
+      if (!localStorage.getItem('hayatiInstallClosed') && !isStandalone) {
+        installBox.classList.add('show');
+      }
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        installBox.classList.remove('show');
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      } else if (isIos && !isStandalone) {
+        iosHint.classList.add('show');
+      }
+    });
+
+    installClose.addEventListener('click', () => {
+      installBox.classList.remove('show');
+      localStorage.setItem('hayatiInstallClosed', '1');
+    });
+
+    iosHintClose.addEventListener('click', () => {
+      iosHint.classList.remove('show');
+    });
+
+    if (isIos && !isStandalone && !localStorage.getItem('hayatiInstallClosed')) {
+      setTimeout(() => installBox.classList.add('show'), 1800);
+    }
 
     function updateProgress() {
       const scrollTop = window.scrollY;
