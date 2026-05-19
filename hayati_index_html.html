@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hayati – Orientalisches Restaurant in Köln</title>
+  <meta name="description" content="Hayati Köln – Orientalisches Restaurant auf der Severinstraße nahe Chlodwigplatz. Falafel, Hummus, Shawarma, Haloumi und mehr." />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f3ec;
+      color: #2b2b2b;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .topbar {
+      background: #2b2118;
+      color: #fff;
+      padding: 10px 18px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid #e7ddcf;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 800;
+      color: #8d341e;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #3b332c;
+    }
+
+    .hero {
+      min-height: 78vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 90px 20px;
+      color: #fff;
+      background:
+        linear-gradient(rgba(34, 21, 12, 0.62), rgba(34, 21, 12, 0.62)),
+        url("https://images.unsplash.com/photo-1542528180-a1208c5169a5?q=80&w=1600&auto=format&fit=crop") center/cover no-repeat;
+    }
+
+    .hero-content {
+      max-width: 850px;
+    }
+
+    .hero small {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 8px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(46px, 9vw, 86px);
+      line-height: 1;
+      margin-bottom: 14px;
+      letter-spacing: 1px;
+    }
+
+    .hero p {
+      font-size: clamp(18px, 3vw, 25px);
+      margin-bottom: 30px;
+      color: #fff4e8;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 2px solid transparent;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: #b84224;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #9b351d;
+      transform: translateY(-1px);
+    }
+
+    .btn-light {
+      background: #fff;
+      color: #35251a;
+    }
+
+    .btn-light:hover {
+      background: #f3e7d8;
+      transform: translateY(-1px);
+    }
+
+    section {
+      padding: 70px 20px;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .section-title span {
+      display: inline-block;
+      color: #b84224;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 1.2px;
+    }
+
+    .section-title h2 {
+      font-size: clamp(30px, 5vw, 44px);
+      color: #2b2118;
+    }
+
+    .intro-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 34px;
+      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      text-align: center;
+      font-size: 18px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .reviews {
+      background: #fffaf3;
+    }
+
+    .review-grid,
+    .menu-grid,
+    .gallery-grid,
+    .contact-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .review-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .review-card,
+    .menu-card,
+    .contact-card {
+      background: #fff;
+      padding: 26px;
+      border-radius: 22px;
+      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+    }
+
+    .stars {
+      color: #d89a16;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .review-card p {
+      color: #40362e;
+      margin-bottom: 18px;
+    }
+
+    .reviewer {
+      font-weight: 800;
+      color: #8d341e;
+    }
+
+    .time {
+      color: #7b7067;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .menu-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .menu-card h3 {
+      color: #b84224;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+
+    .menu-card ul {
+      list-style: none;
+    }
+
+    .menu-card li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0e4d7;
+    }
+
+    .menu-card li:last-child {
+      border-bottom: 0;
+    }
+
+    .about {
+      background: #2b2118;
+      color: #fff;
+    }
+
+    .about .section-title h2,
+    .about .section-title span {
+      color: #fff;
+    }
+
+    .about-text {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 19px;
+      text-align: center;
+      color: #f7e9d8;
+    }
+
+    .about-text p {
+      margin-bottom: 18px;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gallery-item {
+      min-height: 220px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #ddd;
+      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: 0.25s ease;
+    }
+
+    .gallery-item img:hover {
+      transform: scale(1.04);
+    }
+
+    .contact-grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: start;
+    }
+
+    .contact-card h3 {
+      color: #b84224;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .contact-row {
+      padding: 13px 0;
+      border-bottom: 1px solid #f0e4d7;
+    }
+
+    .contact-row:last-child {
+      border-bottom: 0;
+    }
+
+    .opening-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 5px;
+    }
+
+    .opening-table td {
+      padding: 9px 0;
+      border-bottom: 1px solid #f0e4d7;
+    }
+
+    .opening-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .map-box {
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 320px;
+      box-shadow: 0 10px 25px rgba(43, 33, 24, 0.08);
+      background: #e7ddcf;
+    }
+
+    .map-box iframe {
+      width: 100%;
+      height: 360px;
+      border: 0;
+      display: block;
+    }
+
+    .footer {
+      background: #211812;
+      color: #f7e9d8;
+      padding: 34px 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #f7e9d8;
+      text-decoration: underline;
+      margin: 0 8px;
+    }
+
+    .legal-note {
+      margin-top: 12px;
+      opacity: 0.75;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .review-grid,
+      .menu-grid,
+      .gallery-grid,
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        font-size: 13px;
+      }
+
+      .nav-inner {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-links {
+        gap: 11px;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      .hero {
+        min-height: 68vh;
+        padding: 70px 16px;
+      }
+
+      section {
+        padding: 54px 16px;
+      }
+
+      .review-grid,
+      .menu-grid,
+      .gallery-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-card,
+      .review-card,
+      .menu-card,
+      .contact-card {
+        padding: 22px;
+      }
+
+      .gallery-item {
+        min-height: 230px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Heute bis 23:00 geöffnet · Anrufen: 0221 29817957</div>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="brand">Hayati</div>
+      <div class="nav-links">
+        <a href="#bewertungen">Bewertungen</a>
+        <a href="#speisekarte">Speisekarte</a>
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#galerie">Galerie</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-content">
+      <small>Orientalisches Restaurant in Innenstadt</small>
+      <h1>Hayati</h1>
+      <p>Arabische Speisen im orientalischen Stil – frisch, halal und mitten in Köln.</p>
+      <div class="buttons">
+        <a class="btn btn-primary" href="tel:022129817957">Jetzt anrufen</a>
+        <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener">Route anzeigen</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="intro-card">
+        <strong>Willkommen bei Hayati Köln.</strong><br />
+        Auf der Severinstraße, nahe dem Chlodwigplatz, könnt Ihr Falafel, Hummus, Shawarma, Haloomi und weitere orientalische Spezialitäten genießen.
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews" id="bewertungen">
+    <div class="container">
+      <div class="section-title">
+        <span>Kundenbewertungen</span>
+        <h2>Das sagen unsere Gäste</h2>
+      </div>
+
+      <div class="review-grid">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <div class="time">a year ago</div>
+          <p>Everything I’m looking for in a fast meal. Friendly service. Tables in a good environment to sit down and chat. Variety of options, fresh ingredients and great price for large portions.</p>
+          <div class="reviewer">– Cindy L</div>
+        </div>
+
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <div class="time">a month ago</div>
+          <p>My favourite place for food in Köln. The falafel is the best, the staff are friendly and the price is low.</p>
+          <div class="reviewer">– Tom C</div>
+        </div>
+
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <div class="time">3 months ago</div>
+          <p>Really good. I have been suggested to have my first dinner when I arrived in Köln and I continued to go!</p>
+          <div class="reviewer">– Andrea J</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="speisekarte">
+    <div class="container">
+      <div class="section-title">
+        <span>Speisekarte</span>
+        <h2>Beliebte Gerichte</h2>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card">
+          <h3>Falafel</h3>
+          <ul>
+            <li>Falafel Sandwich</li>
+            <li>Falafel Teller</li>
+            <li>Falafel Box</li>
+          </ul>
+        </div>
+
+        <div class="menu-card">
+          <h3>Shawarma</h3>
+          <ul>
+            <li>Shawarma Sandwich</li>
+            <li>Shawarma Teller</li>
+            <li>Shawarma Box</li>
+          </ul>
+        </div>
+
+        <div class="menu-card">
+          <h3>Vegetarisch</h3>
+          <ul>
+            <li>Hummus</li>
+            <li>Haloomi</li>
+            <li>Pommes</li>
+          </ul>
+        </div>
+
+        <div class="menu-card">
+          <h3>Extras</h3>
+          <ul>
+            <li>Fascha</li>
+            <li>Getränke</li>
+            <li>Orientalische Spezialitäten</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="ueber-uns">
+    <div class="container">
+      <div class="section-title">
+        <span>Über uns</span>
+        <h2>Arabische Speisen im orientalischen Stil</h2>
+      </div>
+
+      <div class="about-text">
+        <p>Ab sofort könnt Ihr auf der Severinstraße, nahe dem Chlodwigplatz, arabische Speisen im orientalischen Stil genießen – alles halal.</p>
+        <p>Von Falafel, Hummus, Shawarma und Haloomi bis hin zu Pommes und Fascha: Für jeden ist etwas dabei, egal ob Fleischliebhaber, Vegetarier oder Veganer.</p>
+        <p>Bis zu Eurem nächsten Besuch, wir freuen uns auf Euch!</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="galerie">
+    <div class="container">
+      <div class="section-title">
+        <span>Galerie</span>
+        <h2>Ein kleiner Eindruck</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=900&auto=format&fit=crop" alt="Orientalisches Essen" /></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1593001874117-c99c800e3eb8?q=80&w=900&auto=format&fit=crop" alt="Falafel und frische Zutaten" /></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?q=80&w=900&auto=format&fit=crop" alt="Restaurant Gericht" /></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?q=80&w=900&auto=format&fit=crop" alt="Hummus" /></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1633321702518-7feccafb94d5?q=80&w=900&auto=format&fit=crop" alt="Shawarma" /></div>
+        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=900&auto=format&fit=crop" alt="Frisches Essen" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="container">
+      <div class="section-title">
+        <span>Kontakt</span>
+        <h2>Besuchen Sie uns</h2>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h3>Kontakt & Adresse</h3>
+          <div class="contact-row"><strong>Telefon:</strong><br /><a href="tel:022129817957">0221 29817957</a></div>
+          <div class="contact-row"><strong>Adresse:</strong><br />Severinstraße 52C<br />50678 Köln<br />Deutschland</div>
+          <div class="contact-row">
+            <div class="buttons" style="justify-content:flex-start; margin-top: 8px;">
+              <a class="btn btn-primary" href="tel:022129817957">Jetzt anrufen</a>
+              <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query=Severinstra%C3%9Fe+52C,+50678+K%C3%B6ln" target="_blank" rel="noopener">Route anzeigen</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <h3>Öffnungszeiten</h3>
+          <table class="opening-table">
+            <tr><td>Mo</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>Di</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>Mi</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>Do</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>Fr</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>Sa</td><td>11:00–23:00 Uhr</td></tr>
+            <tr><td>So</td><td>11:00–23:00 Uhr</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="map-box" style="margin-top: 24px;">
+        <iframe title="Hayati Köln Karte" loading="lazy" src="https://www.google.com/maps?q=Severinstra%C3%9Fe%2052C%2C%2050678%20K%C3%B6ln&output=embed"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div><strong>Hayati</strong> · Severinstraße 52C · 50678 Köln · 0221 29817957</div>
+    <div style="margin-top: 10px;">
+      <a href="#kontakt">Kontakt</a>
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#speisekarte">Speisekarte</a>
+    </div>
+    <div class="legal-note">Hinweis: Impressum und Datenschutz sollten vor offizieller Veröffentlichung ergänzt werden.</div>
+  </footer>
+</body>
+</html>
